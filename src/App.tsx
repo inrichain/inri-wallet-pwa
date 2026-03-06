@@ -57,6 +57,7 @@ type Lang =
   | "ko";
 
 type View = "welcome" | "unlock" | "wallet";
+type ThemeMode = "dark" | "silver";
 type Tab =
   | "dashboard"
   | "send"
@@ -89,6 +90,7 @@ const AVATAR_KEY = "inri_avatar";
 const LANG_KEY = "inri_lang";
 const TOKENS_KEY = "inri_custom_tokens";
 const TXS_KEY = "inri_local_txs_v2";
+const THEME_KEY = "inri_theme_mode";
 
 const LANGS: { code: Lang; label: string }[] = [
   { code: "en", label: "English" },
@@ -347,22 +349,27 @@ const EN: Record<UIKey, string> = {
   network: "Network",
 };
 
+const makeLocale = (overrides: Partial<Record<UIKey, string>>): Record<UIKey, string> => ({
+  ...EN,
+  ...overrides,
+});
+
 const TRANSLATIONS: Record<Lang, Record<UIKey, string>> = {
   pt: PT,
   en: EN,
-  es: EN,
-  fr: EN,
-  de: EN,
-  ru: EN,
-  tr: EN,
-  ar: EN,
-  hi: EN,
-  id: EN,
-  vi: EN,
-  th: EN,
-  zh: EN,
-  ja: EN,
-  ko: EN,
+  es: makeLocale({ dashboard:"Panel", send:"Enviar", receive:"Recibir", tokens:"Tokens", activity:"Actividad", swap:"Swap", bridge:"Bridge", settings:"Configuración", create:"Crear", import:"Importar", unlock:"Desbloquear", password:"Contraseña", confirm:"Confirmar", seed_new:"Nueva frase semilla (12 palabras)", seed_import:"Frase semilla", secure_enter:"Proteger y entrar", generate:"Generar", copied:"Copiado.", scan_qr:"Escanear QR", keep_session:"Mantener desbloqueado en esta sesión", logout:"Bloquear", total_balance:"Balance total", refresh_tokens:"Actualizar tokens", refresh_activity:"Actualizar actividad", send_token:"Enviar activo", token:"Activo", to:"Para", amount:"Cantidad", sending:"Enviando...", need_gas:"Necesita INRI para gas.", your_address:"Tu dirección", explorer:"Explorador", add_token:"Agregar token", custom_tokens:"Tokens personalizados", token_symbol:"Símbolo", token_decimals:"Decimales", token_address:"Dirección del token", token_logo:"Logo (opcional)", token_added:"Token agregado.", avatar:"Avatar", change_avatar:"Cambiar avatar", remove_avatar:"Eliminar avatar", delete_vault_confirm:"¿Eliminar el vault local? Debes tener la semilla para restaurar.", wrong_password:"Contraseña incorrecta.", no_vault:"No se encontró un vault local.", invalid_seed:"Frase semilla inválida.", pw_min:"La contraseña debe tener al menos 8 caracteres.", pw_match:"Las contraseñas no coinciden.", invalid_addr:"Dirección inválida.", invalid_amount:"Cantidad inválida.", amount_gt0:"La cantidad debe ser mayor que 0.", camera_fail:"No se pudo usar la cámara.", qr_ok:"QR capturado.", create_account:"Crear cuenta", account_switcher:"Cambiar cuenta", balance:"Balance", estimated_fee:"Tarifa estimada", fee_pending:"La vista previa de la tarifa aparece después de ingresar destino y cantidad.", history_empty:"No hay transacciones cargadas.", from:"Desde", to_network:"Red de destino", from_network:"Red de origen", estimated_receive:"Recepción estimada", preview_quote:"Vista previa", session:"Sesión", security:"Seguridad", vault:"Vault", language:"Idioma", global:"Global", local:"Local", native_coin:"moneda nativa", use_my_address:"Usar mi dirección", network:"Red" }),
+  fr: makeLocale({ dashboard:"Tableau", send:"Envoyer", receive:"Recevoir", tokens:"Tokens", activity:"Activité", swap:"Swap", bridge:"Bridge", settings:"Paramètres", create:"Créer", import:"Importer", unlock:"Déverrouiller", password:"Mot de passe", confirm:"Confirmer", seed_new:"Nouvelle phrase secrète (12 mots)", seed_import:"Phrase secrète", secure_enter:"Sécuriser et entrer", generate:"Générer", copied:"Copié.", scan_qr:"Scanner QR", keep_session:"Rester déverrouillé pendant cette session", logout:"Verrouiller", total_balance:"Solde total", refresh_tokens:"Actualiser les tokens", refresh_activity:"Actualiser l’activité", send_token:"Envoyer un actif", token:"Actif", to:"Vers", amount:"Montant", sending:"Envoi...", need_gas:"INRI requis pour le gas.", your_address:"Votre adresse", explorer:"Explorateur", add_token:"Ajouter un token", custom_tokens:"Tokens personnalisés", token_symbol:"Symbole", token_decimals:"Décimales", token_address:"Adresse du token", token_logo:"Logo (optionnel)", token_added:"Token ajouté.", avatar:"Avatar", change_avatar:"Changer l’avatar", remove_avatar:"Supprimer l’avatar", delete_vault_confirm:"Supprimer le vault local ? Vous devez avoir la phrase secrète pour restaurer.", wrong_password:"Mot de passe incorrect.", no_vault:"Aucun vault local trouvé.", invalid_seed:"Phrase secrète invalide.", pw_min:"Le mot de passe doit contenir au moins 8 caractères.", pw_match:"Les mots de passe ne correspondent pas.", invalid_addr:"Adresse invalide.", invalid_amount:"Montant invalide.", amount_gt0:"Le montant doit être supérieur à 0.", camera_fail:"Impossible d’utiliser la caméra.", qr_ok:"QR capturé.", create_account:"Créer un compte", account_switcher:"Changer de compte", balance:"Solde", estimated_fee:"Frais estimés", fee_pending:"L’aperçu des frais apparaît après avoir saisi la destination et le montant.", history_empty:"Aucune transaction chargée.", from:"De", to_network:"Réseau de destination", from_network:"Réseau d’origine", estimated_receive:"Réception estimée", preview_quote:"Aperçu", session:"Session", security:"Sécurité", vault:"Vault", language:"Langue", global:"Global", local:"Local", native_coin:"monnaie native", use_my_address:"Utiliser mon adresse", network:"Réseau" }),
+  de: makeLocale({ dashboard:"Dashboard", send:"Senden", receive:"Empfangen", tokens:"Tokens", activity:"Aktivität", swap:"Swap", bridge:"Bridge", settings:"Einstellungen", create:"Erstellen", import:"Importieren", unlock:"Entsperren", password:"Passwort", confirm:"Bestätigen", seed_new:"Neue Seed-Phrase (12 Wörter)", seed_import:"Seed-Phrase", secure_enter:"Sichern & öffnen", generate:"Generieren", copied:"Kopiert.", scan_qr:"QR scannen", keep_session:"In dieser Sitzung entsperrt bleiben", logout:"Sperren", total_balance:"Gesamtsaldo", refresh_tokens:"Tokens aktualisieren", refresh_activity:"Aktivität aktualisieren", send_token:"Asset senden", token:"Asset", to:"An", amount:"Betrag", sending:"Wird gesendet...", need_gas:"INRI für Gas erforderlich.", your_address:"Ihre Adresse", explorer:"Explorer", add_token:"Token hinzufügen", custom_tokens:"Benutzerdefinierte Tokens", token_symbol:"Symbol", token_decimals:"Dezimalstellen", token_address:"Token-Adresse", token_logo:"Logo (optional)", token_added:"Token hinzugefügt.", avatar:"Avatar", change_avatar:"Avatar ändern", remove_avatar:"Avatar entfernen", delete_vault_confirm:"Lokalen Vault löschen? Sie benötigen die Seed-Phrase zur Wiederherstellung.", wrong_password:"Falsches Passwort.", no_vault:"Kein lokaler Vault gefunden.", invalid_seed:"Ungültige Seed-Phrase.", pw_min:"Passwort muss mindestens 8 Zeichen haben.", pw_match:"Passwörter stimmen nicht überein.", invalid_addr:"Ungültige Adresse.", invalid_amount:"Ungültiger Betrag.", amount_gt0:"Der Betrag muss größer als 0 sein.", camera_fail:"Kamera konnte nicht verwendet werden.", qr_ok:"QR erfasst.", create_account:"Konto erstellen", account_switcher:"Konto wechseln", balance:"Saldo", estimated_fee:"Geschätzte Gebühr", fee_pending:"Die Gebührenvorschau erscheint nach Eingabe von Ziel und Betrag.", history_empty:"Keine Transaktionen geladen.", from:"Von", to_network:"Zielnetzwerk", from_network:"Quellnetzwerk", estimated_receive:"Geschätzter Erhalt", preview_quote:"Vorschau", session:"Sitzung", security:"Sicherheit", vault:"Vault", language:"Sprache", global:"Global", local:"Lokal", native_coin:"native coin", use_my_address:"Meine Adresse verwenden", network:"Netzwerk" }),
+  ru: makeLocale({ dashboard:"Панель", send:"Отправить", receive:"Получить", tokens:"Токены", activity:"Активность", swap:"Swap", bridge:"Bridge", settings:"Настройки", create:"Создать", import:"Импорт", unlock:"Разблокировать", password:"Пароль", confirm:"Подтвердить", seed_new:"Новая seed-фраза (12 слов)", seed_import:"Seed-фраза", secure_enter:"Защитить и войти", generate:"Создать", copied:"Скопировано.", scan_qr:"Сканировать QR", keep_session:"Оставаться разблокированным в этой сессии", logout:"Заблокировать", total_balance:"Общий баланс", refresh_tokens:"Обновить токены", refresh_activity:"Обновить активность", send_token:"Отправить актив", token:"Актив", to:"Кому", amount:"Сумма", sending:"Отправка...", need_gas:"Нужен INRI для gas.", your_address:"Ваш адрес", explorer:"Эксплорер", add_token:"Добавить токен", custom_tokens:"Пользовательские токены", token_symbol:"Символ", token_decimals:"Десятичные", token_address:"Адрес токена", token_logo:"Логотип (необязательно)", token_added:"Токен добавлен.", avatar:"Аватар", change_avatar:"Изменить аватар", remove_avatar:"Удалить аватар", balance:"Баланс", estimated_fee:"Комиссия", fee_pending:"Предпросмотр комиссии появится после ввода адреса и суммы.", history_empty:"Нет загруженных транзакций.", from:"От", to_network:"Сеть назначения", from_network:"Исходная сеть", estimated_receive:"Ожидаемое получение", preview_quote:"Предпросмотр", session:"Сессия", security:"Безопасность", vault:"Vault", language:"Язык", global:"Глобально", local:"Локально", native_coin:"нативная монета", use_my_address:"Использовать мой адрес", network:"Сеть", create_account:"Создать аккаунт", account_switcher:"Переключение аккаунта" }),
+  tr: makeLocale({ dashboard:"Panel", send:"Gönder", receive:"Al", tokens:"Tokenlar", activity:"Aktivite", swap:"Swap", bridge:"Bridge", settings:"Ayarlar", create:"Oluştur", import:"İçe aktar", unlock:"Kilidi aç", password:"Şifre", confirm:"Onayla", secure_enter:"Koru ve gir", generate:"Oluştur", scan_qr:"QR Tara", logout:"Kilitle", total_balance:"Toplam bakiye", refresh_tokens:"Tokenları yenile", refresh_activity:"Aktiviteyi yenile", send_token:"Varlık gönder", token:"Varlık", to:"Alıcı", amount:"Miktar", your_address:"Adresin", explorer:"Explorer", add_token:"Token ekle", custom_tokens:"Özel tokenlar", token_symbol:"Sembol", token_decimals:"Ondalık", token_address:"Token adresi", token_logo:"Logo (isteğe bağlı)", token_added:"Token eklendi.", avatar:"Avatar", change_avatar:"Avatarı değiştir", remove_avatar:"Avatarı kaldır", balance:"Bakiye", estimated_fee:"Tahmini ücret", history_empty:"İşlem yok.", from:"Kimden", to_network:"Hedef ağ", from_network:"Kaynak ağ", estimated_receive:"Tahmini alım", session:"Oturum", security:"Güvenlik", vault:"Vault", language:"Dil", native_coin:"yerel coin", use_my_address:"Adresimi kullan", create_account:"Hesap oluştur", account_switcher:"Hesap değiştir" }),
+  ar: makeLocale({ dashboard:"الواجهة", send:"إرسال", receive:"استلام", tokens:"الرموز", activity:"النشاط", swap:"Swap", bridge:"Bridge", settings:"الإعدادات", create:"إنشاء", import:"استيراد", unlock:"فتح", password:"كلمة المرور", confirm:"تأكيد", secure_enter:"تأمين ودخول", generate:"إنشاء", scan_qr:"مسح QR", logout:"قفل", total_balance:"إجمالي الرصيد", refresh_tokens:"تحديث الرموز", refresh_activity:"تحديث النشاط", send_token:"إرسال أصل", token:"الأصل", to:"إلى", amount:"الكمية", your_address:"عنوانك", explorer:"المستكشف", add_token:"إضافة رمز", custom_tokens:"رموز مخصصة", token_symbol:"الرمز", token_decimals:"الكسور", token_address:"عنوان الرمز", token_logo:"الشعار (اختياري)", avatar:"الصورة", change_avatar:"تغيير الصورة", remove_avatar:"إزالة الصورة", balance:"الرصيد", estimated_fee:"الرسوم التقديرية", history_empty:"لا توجد معاملات.", from:"من", to_network:"شبكة الوجهة", from_network:"شبكة المصدر", estimated_receive:"الاستلام التقديري", session:"الجلسة", security:"الأمان", vault:"Vault", language:"اللغة", native_coin:"عملة أصلية", use_my_address:"استخدام عنواني", create_account:"إنشاء حساب", account_switcher:"تبديل الحساب" }),
+  hi: makeLocale({ dashboard:"डैशबोर्ड", send:"भेजें", receive:"प्राप्त करें", tokens:"टोकन", activity:"गतिविधि", swap:"Swap", bridge:"Bridge", settings:"सेटिंग्स", create:"बनाएं", import:"इम्पोर्ट", unlock:"अनलॉक", password:"पासवर्ड", confirm:"पुष्टि", secure_enter:"सुरक्षित करें और प्रवेश करें", generate:"जेनरेट", scan_qr:"QR स्कैन", logout:"लॉक", total_balance:"कुल बैलेंस", refresh_tokens:"टोकन रीफ्रेश", refresh_activity:"गतिविधि रीफ्रेश", send_token:"एसेट भेजें", token:"एसेट", to:"को", amount:"राशि", your_address:"आपका पता", explorer:"एक्सप्लोरर", add_token:"टोकन जोड़ें", custom_tokens:"कस्टम टोकन", token_symbol:"सिंबल", token_decimals:"डेसिमल", token_address:"टोकन पता", token_logo:"लोगो (वैकल्पिक)", avatar:"अवतार", change_avatar:"अवतार बदलें", remove_avatar:"अवतार हटाएं", balance:"बैलेंस", estimated_fee:"अनुमानित शुल्क", history_empty:"कोई ट्रांजैक्शन नहीं.", from:"से", to_network:"गंतव्य नेटवर्क", from_network:"स्रोत नेटवर्क", estimated_receive:"अनुमानित प्राप्ति", session:"सेशन", security:"सुरक्षा", vault:"Vault", language:"भाषा", native_coin:"नेटिव कॉइन", use_my_address:"मेरा पता उपयोग करें", create_account:"अकाउंट बनाएं", account_switcher:"अकाउंट स्विचर" }),
+  id: makeLocale({ dashboard:"Dasbor", send:"Kirim", receive:"Terima", tokens:"Token", activity:"Aktivitas", swap:"Swap", bridge:"Bridge", settings:"Pengaturan", create:"Buat", import:"Impor", unlock:"Buka", password:"Kata sandi", confirm:"Konfirmasi", secure_enter:"Amankan & Masuk", generate:"Buat", scan_qr:"Pindai QR", logout:"Kunci", total_balance:"Saldo total", refresh_tokens:"Segarkan token", refresh_activity:"Segarkan aktivitas", send_token:"Kirim aset", token:"Aset", to:"Ke", amount:"Jumlah", your_address:"Alamat Anda", explorer:"Explorer", add_token:"Tambah token", custom_tokens:"Token kustom", token_symbol:"Simbol", token_decimals:"Desimal", token_address:"Alamat token", token_logo:"Logo (opsional)", avatar:"Avatar", change_avatar:"Ganti avatar", remove_avatar:"Hapus avatar", balance:"Saldo", estimated_fee:"Biaya estimasi", history_empty:"Belum ada transaksi.", from:"Dari", to_network:"Jaringan tujuan", from_network:"Jaringan asal", estimated_receive:"Perkiraan diterima", session:"Sesi", security:"Keamanan", vault:"Vault", language:"Bahasa", native_coin:"koin native", use_my_address:"Gunakan alamat saya", create_account:"Buat akun", account_switcher:"Pengalih akun" }),
+  vi: makeLocale({ dashboard:"Bảng điều khiển", send:"Gửi", receive:"Nhận", tokens:"Token", activity:"Hoạt động", swap:"Swap", bridge:"Bridge", settings:"Cài đặt", create:"Tạo", import:"Nhập", unlock:"Mở khóa", password:"Mật khẩu", confirm:"Xác nhận", secure_enter:"Bảo vệ & vào", generate:"Tạo", scan_qr:"Quét QR", logout:"Khóa", total_balance:"Tổng số dư", refresh_tokens:"Làm mới token", refresh_activity:"Làm mới hoạt động", send_token:"Gửi tài sản", token:"Tài sản", to:"Đến", amount:"Số lượng", your_address:"Địa chỉ của bạn", explorer:"Explorer", add_token:"Thêm token", custom_tokens:"Token tùy chỉnh", token_symbol:"Ký hiệu", token_decimals:"Số thập phân", token_address:"Địa chỉ token", token_logo:"Logo (tùy chọn)", avatar:"Avatar", change_avatar:"Đổi avatar", remove_avatar:"Xóa avatar", balance:"Số dư", estimated_fee:"Phí ước tính", history_empty:"Chưa có giao dịch.", from:"Từ", to_network:"Mạng đích", from_network:"Mạng nguồn", estimated_receive:"Nhận ước tính", session:"Phiên", security:"Bảo mật", vault:"Vault", language:"Ngôn ngữ", native_coin:"coin gốc", use_my_address:"Dùng địa chỉ của tôi", create_account:"Tạo tài khoản", account_switcher:"Chuyển tài khoản" }),
+  th: makeLocale({ dashboard:"แดชบอร์ด", send:"ส่ง", receive:"รับ", tokens:"โทเค็น", activity:"กิจกรรม", swap:"Swap", bridge:"Bridge", settings:"การตั้งค่า", create:"สร้าง", import:"นำเข้า", unlock:"ปลดล็อก", password:"รหัสผ่าน", confirm:"ยืนยัน", secure_enter:"ป้องกันและเข้า", generate:"สร้าง", scan_qr:"สแกน QR", logout:"ล็อก", total_balance:"ยอดคงเหลือรวม", refresh_tokens:"รีเฟรชโทเค็น", refresh_activity:"รีเฟรชกิจกรรม", send_token:"ส่งสินทรัพย์", token:"สินทรัพย์", to:"ถึง", amount:"จำนวน", your_address:"ที่อยู่ของคุณ", explorer:"Explorer", add_token:"เพิ่มโทเค็น", custom_tokens:"โทเค็นกำหนดเอง", token_symbol:"สัญลักษณ์", token_decimals:"ทศนิยม", token_address:"ที่อยู่โทเค็น", token_logo:"โลโก้ (ไม่บังคับ)", token_added:"เพิ่มโทเค็นแล้ว", avatar:"อวตาร", change_avatar:"เปลี่ยนอวตาร", remove_avatar:"ลบอวตาร", balance:"ยอดคงเหลือ", estimated_fee:"ค่าธรรมเนียมโดยประมาณ", history_empty:"ยังไม่มีธุรกรรม", from:"จาก", to_network:"เครือข่ายปลายทาง", from_network:"เครือข่ายต้นทาง", estimated_receive:"จำนวนที่จะได้รับ", preview_quote:"ตัวอย่างราคา", session:"เซสชัน", security:"ความปลอดภัย", vault:"Vault", language:"ภาษา", global:"ทั่วไป", local:"ภายในเครื่อง", native_coin:"เหรียญหลัก", use_my_address:"ใช้ที่อยู่ของฉัน", network:"เครือข่าย", create_account:"สร้างบัญชี", account_switcher:"สลับบัญชี" }),
+  zh: makeLocale({ dashboard:"仪表盘", send:"发送", receive:"接收", tokens:"代币", activity:"活动", swap:"Swap", bridge:"Bridge", settings:"设置", create:"创建", import:"导入", unlock:"解锁", password:"密码", confirm:"确认", secure_enter:"保护并进入", generate:"生成", scan_qr:"扫描二维码", logout:"锁定", total_balance:"总余额", refresh_tokens:"刷新代币", refresh_activity:"刷新活动", send_token:"发送资产", token:"资产", to:"到", amount:"数量", your_address:"你的地址", explorer:"浏览器", add_token:"添加代币", custom_tokens:"自定义代币", token_symbol:"符号", token_decimals:"小数位", token_address:"代币地址", token_logo:"Logo（可选）", avatar:"头像", change_avatar:"更改头像", remove_avatar:"删除头像", balance:"余额", estimated_fee:"预估费用", history_empty:"暂无交易。", from:"从", to_network:"目标网络", from_network:"来源网络", estimated_receive:"预计收到", session:"会话", security:"安全", vault:"Vault", language:"语言", native_coin:"原生代币", use_my_address:"使用我的地址", create_account:"创建账户", account_switcher:"账户切换" }),
+  ja: makeLocale({ dashboard:"ダッシュボード", send:"送金", receive:"受取", tokens:"トークン", activity:"アクティビティ", swap:"Swap", bridge:"Bridge", settings:"設定", create:"作成", import:"インポート", unlock:"ロック解除", password:"パスワード", confirm:"確認", secure_enter:"保護して入る", generate:"生成", scan_qr:"QRをスキャン", logout:"ロック", total_balance:"合計残高", refresh_tokens:"トークン更新", refresh_activity:"アクティビティ更新", send_token:"資産を送る", token:"資産", to:"宛先", amount:"数量", your_address:"あなたのアドレス", explorer:"エクスプローラー", add_token:"トークン追加", custom_tokens:"カスタムトークン", token_symbol:"シンボル", token_decimals:"小数", token_address:"トークンアドレス", token_logo:"ロゴ（任意）", avatar:"アバター", change_avatar:"アバター変更", remove_avatar:"アバター削除", balance:"残高", estimated_fee:"推定手数料", history_empty:"取引はありません。", from:"送信元", to_network:"送信先ネットワーク", from_network:"送信元ネットワーク", estimated_receive:"推定受取額", session:"セッション", security:"セキュリティ", vault:"Vault", language:"言語", native_coin:"ネイティブコイン", use_my_address:"自分のアドレスを使う", create_account:"アカウント作成", account_switcher:"アカウント切替" }),
+  ko: makeLocale({ dashboard:"대시보드", send:"보내기", receive:"받기", tokens:"토큰", activity:"활동", swap:"Swap", bridge:"Bridge", settings:"설정", create:"생성", import:"가져오기", unlock:"잠금 해제", password:"비밀번호", confirm:"확인", secure_enter:"보호 후 진입", generate:"생성", scan_qr:"QR 스캔", logout:"잠금", total_balance:"총 잔액", refresh_tokens:"토큰 새로고침", refresh_activity:"활동 새로고침", send_token:"자산 보내기", token:"자산", to:"받는 주소", amount:"수량", your_address:"내 주소", explorer:"탐색기", add_token:"토큰 추가", custom_tokens:"사용자 지정 토큰", token_symbol:"심볼", token_decimals:"소수점", token_address:"토큰 주소", token_logo:"로고 (선택)", avatar:"아바타", change_avatar:"아바타 변경", remove_avatar:"아바타 삭제", balance:"잔액", estimated_fee:"예상 수수료", history_empty:"거래가 없습니다.", from:"보내는 쪽", to_network:"대상 네트워크", from_network:"출발 네트워크", estimated_receive:"예상 수령", session:"세션", security:"보안", vault:"Vault", language:"언어", native_coin:"네이티브 코인", use_my_address:"내 주소 사용", create_account:"계정 만들기", account_switcher:"계정 전환" }),
 };
 
 function tr(lang: Lang, key: UIKey) {
@@ -416,6 +423,14 @@ function getTokenInitials(symbol: string) {
   return clean.slice(0, Math.min(4, clean.length));
 }
 
+function getAssetMeta(symbol: string, tokens: Token[]) {
+  if (symbol.toUpperCase() === "INRI") {
+    return { symbol: "INRI", logo: assetUrl("token-inri.png") };
+  }
+  const found = tokens.find((t) => t.symbol === symbol);
+  return { symbol, logo: found?.logo || getAssetLogo(symbol) || "" };
+}
+
 function getExtraCopy(lang: Lang) {
   const copy = {
     en: {
@@ -437,6 +452,22 @@ function getExtraCopy(lang: Lang) {
       bridge_preview: "Bridge preview",
       bridge_fee_note: "Preview uses your bridge fee of 0.2%.",
       path: "Path",
+      launch: "Launch",
+      rpc_issue: "RPC issue",
+      keep_session_hint: "When you close the app, it will ask for your password again.",
+      backup_seed: "{copy2.backup_seed}",
+      stored_local: "{copy2.stored_local}",
+      stored_local_short: "Seed is encrypted on your device.",
+      password_placeholder: "password...",
+      amount_paid_note: "Amount paid to process the transaction on network.",
+      appearance: "Appearance",
+      dark_mode: "Dark mode",
+      silver_mode: "Silver mode",
+      remove: "Remove",
+      remove_token: "Remove token",
+      custom_token_list: "Custom token list",
+      remove_token_confirm: "Remove this custom token?",
+      token_removed: "Token removed.",
     },
     pt: {
       scanner_hint: "Aponte a câmera para um QR code. O endereço será preenchido automaticamente.",
@@ -457,6 +488,22 @@ function getExtraCopy(lang: Lang) {
       bridge_preview: "Prévia da bridge",
       bridge_fee_note: "A prévia usa a sua taxa de bridge de 0,2%.",
       path: "Caminho",
+      launch: "Abrir",
+      rpc_issue: "Problema no RPC",
+      keep_session_hint: "Ao fechar o app, ele volta a pedir sua senha.",
+      backup_seed: "Guarde sua seed offline. Ninguém pode recuperar seus fundos.",
+      stored_local: "Esta carteira guarda sua seed criptografada localmente (PWA).",
+      stored_local_short: "A seed fica criptografada no seu dispositivo.",
+      password_placeholder: "senha...",
+      amount_paid_note: "Valor pago para processar a transação na rede.",
+      appearance: "Aparência",
+      dark_mode: "Modo escuro",
+      silver_mode: "Modo prata",
+      remove: "Remover",
+      remove_token: "Remover token",
+      custom_token_list: "Lista de tokens manuais",
+      remove_token_confirm: "Remover este token manual?",
+      token_removed: "Token removido.",
     },
     es: {
       scanner_hint: "Apunta la cámara al código QR. La dirección se completará automáticamente.",
@@ -475,7 +522,7 @@ function getExtraCopy(lang: Lang) {
     ja: {scanner_hint:"カメラをQRコードに向けると、ウォレットアドレスが自動入力されます。",online:"オンライン",offline:"オフライン",official_pwa:"公式PWA • INRI CHAIN",wallet:"ウォレット",not_unlocked:"未解除",live_balances:"自動残高 (ERC-20)",tip_decimals:"ヒント: iUSD = 6桁。WINRI/DNR = 18。",new_account_created:"新しいアカウントを作成しました。",symbol_required:"シンボルは必須です。",invalid_token_address:"無効なトークンアドレスです。",invalid_decimals:"無効な小数桁です。",reset:"リセット",preview_contracts:"実際のswapコントラクトが接続されると、手数料と最終見積もりが更新されます。",preview_bridge:"bridgeコントラクトが接続されると、最終bridge手数料とルートが更新されます。",bridge_preview:"Bridgeプレビュー",bridge_fee_note:"プレビューでは0.2%のbridge手数料を使用します。",path:"パス"},
     ko: {scanner_hint:"카메라를 QR 코드에 맞추면 지갑 주소가 자동으로 입력됩니다.",online:"온라인",offline:"오프라인",official_pwa:"공식 PWA • INRI CHAIN",wallet:"지갑",not_unlocked:"잠김",live_balances:"자동 잔액 (ERC-20)",tip_decimals:"팁: iUSD = 소수점 6자리, WINRI/DNR = 18자리입니다.",new_account_created:"새 계정이 생성되었습니다.",symbol_required:"심볼이 필요합니다.",invalid_token_address:"잘못된 토큰 주소입니다.",invalid_decimals:"잘못된 소수 자릿수입니다.",reset:"재설정",preview_contracts:"실제 swap 계약이 연결되면 수수료와 최종 견적이 업데이트됩니다.",preview_bridge:"bridge 계약이 연결되면 최종 bridge 수수료와 경로가 업데이트됩니다.",bridge_preview:"Bridge 미리보기",bridge_fee_note:"미리보기에는 0.2% bridge 수수료가 적용됩니다.",path:"경로"},
   } as const;
-  return copy[lang] ?? copy.en;
+  return { ...copy.en, ...(copy[lang] ?? {}) };
 }
 
 function loadLocalTxs(): LocalTx[] {
@@ -535,6 +582,7 @@ function computeBridgeReceive(amount: string, feeBps = 20) {
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem(LANG_KEY) as Lang) || "en");
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => (localStorage.getItem(THEME_KEY) as ThemeMode) || "dark");
 
   const [view, setView] = useState<View>(loadVault() ? "unlock" : "welcome");
   const [tab, setTab] = useState<Tab>("dashboard");
@@ -633,6 +681,11 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(LANG_KEY, lang);
   }, [lang]);
+
+  useEffect(() => {
+    localStorage.setItem(THEME_KEY, themeMode);
+    document.body.setAttribute("data-theme", themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     const s = sessionStorage.getItem(SESSION_KEY);
@@ -991,6 +1044,15 @@ export default function App() {
     setTimeout(() => refreshTokens(), 500);
   }
 
+  function removeCustomToken(symbol: string, address: string) {
+    if (!window.confirm(copy2.remove_token_confirm)) return;
+    const next = customTokens.filter((t) => !(t.symbol === symbol && t.address === address));
+    setCustomTokens(next);
+    localStorage.setItem(TOKENS_KEY, JSON.stringify(next));
+    showToast(copy2.token_removed);
+    setTimeout(() => refreshTokens(), 300);
+  }
+
   function createAnotherAccount() {
     setAccountCount((v) => v + 1);
     showToast(copy2.new_account_created);
@@ -1076,7 +1138,7 @@ export default function App() {
   }
 
   const mobileAccountPanel =
-    view === "wallet" && tab === "dashboard" ? (
+    view === "wallet" ? (
       <div className="mobileDrawer">
         <div className="drawerHead">
           <div>
@@ -1093,7 +1155,7 @@ export default function App() {
                 {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
               </div>
               <div>
-                <div className="pillTitle">Wallet</div>
+                <div className="pillTitle">{copy2.wallet}</div>
                 <div className="mono muted2 pillSub">{shortAddr(selected)}</div>
               </div>
             </div>
@@ -1170,6 +1232,20 @@ export default function App() {
           font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
           background:linear-gradient(180deg,#0b0b0f 0%, #0a0f1a 100%);
           color:var(--text);
+          transition:background .2s ease,color .2s ease;
+        }
+        body[data-theme="silver"]{
+          --bg:#dfe3ea;
+          --panel:#f5f7fb;
+          --panel2:#eef1f6;
+          --panel3:#e4e9f1;
+          --line:#c6cfdb;
+          --text:#111827;
+          --muted:#5f6b7c;
+          --accent:#446dff;
+          --accent2:#6389ff;
+          --shadow:0 10px 28px rgba(44,60,84,.10);
+          background:linear-gradient(180deg,#e8edf5 0%, #d7dde7 100%);
         }
         .mono{
           font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
@@ -1710,6 +1786,13 @@ export default function App() {
           gap:10px;
           margin-bottom:10px;
         }
+        .assetBadge{display:flex;align-items:center;gap:10px;}
+        .assetBadgeMeta{display:flex;flex-direction:column;min-width:0;}
+        .assetBadgeMeta b{font-size:15px;line-height:1.1;}
+        .assetBadgeMeta span{font-size:12px;color:var(--muted);margin-top:4px;}
+        .assetLogoWrap{position:relative;width:42px;height:42px;flex:0 0 42px;}
+        .assetLogoWrap .tokenLogo{width:42px;height:42px;border-radius:50%;overflow:hidden;background:var(--panel3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
+        .assetInitialBadge{position:absolute;right:-4px;bottom:-4px;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;box-shadow:var(--shadow);}
         .swapAssetPreview{
           display:flex;
           align-items:center;
@@ -1813,7 +1896,7 @@ export default function App() {
         <main className="main">
           <div className="mainHeader">
             <div className="hTitle">
-              <b>{tab === "dashboard" ? "Wallet" : tr(lang, tab as UIKey)}</b>
+              <b>{tab === "dashboard" ? copy2.wallet : tr(lang, tab as UIKey)}</b>
               <span className="muted2">
                 RPC <span className="mono">{INRI.rpcUrls[0]}</span>
               </span>
@@ -1821,9 +1904,9 @@ export default function App() {
 
             <div className="headerActions">
               {networkOk ? (
-                <span className="badgeOk">Online • {chainId}</span>
+                <span className="badgeOk">{copy2.online} • {chainId}</span>
               ) : (
-                <span className="badgeBad">RPC issue</span>
+                <span className="badgeBad">{copy2.rpc_issue}</span>
               )}
 
               {view === "wallet" ? (
@@ -1840,7 +1923,7 @@ export default function App() {
                 className="btn btnPrimary"
                 onClick={() => document.getElementById("appTop")?.scrollIntoView({ behavior: "smooth" })}
               >
-                Launch
+                {copy2.launch}
               </button>
             </div>
           </div>
@@ -1860,7 +1943,7 @@ export default function App() {
                   {tr(lang, "keep_session")}
                 </label>
                 <div className="muted2" style={{ fontSize: 12, marginTop: 6 }}>
-                  (Ao fechar o app, volta a pedir senha.)
+                  {copy2.keep_session_hint}
                 </div>
               </div>
             )}
@@ -1890,7 +1973,7 @@ export default function App() {
                         {tr(lang, "secure_enter")}
                       </button>
                     </div>
-                    <div className="muted smallTop">Backup your seed offline. Nobody can recover funds.</div>
+                    <div className="muted smallTop">{copy2.backup_seed}</div>
                   </div>
 
                   <div className="cardFlat">
@@ -1917,7 +2000,7 @@ export default function App() {
                         {tr(lang, "secure_enter")}
                       </button>
                     </div>
-                    <div className="muted smallTop">This wallet stores your seed encrypted locally (PWA).</div>
+                    <div className="muted smallTop">{copy2.stored_local}</div>
                   </div>
                 </div>
               </div>
@@ -1933,13 +2016,13 @@ export default function App() {
                     type="password"
                     value={unlockPw}
                     onChange={(e) => setUnlockPw(e.target.value)}
-                    placeholder="password..."
+                    placeholder={copy2.password_placeholder}
                   />
                   <button className="btn btnPrimary" onClick={unlock}>
                     {tr(lang, "unlock")}
                   </button>
                 </div>
-                <div className="muted smallTop">Seed fica criptografada no seu dispositivo.</div>
+                <div className="muted smallTop">{copy2.stored_local_short}</div>
               </div>
             )}
 
@@ -2015,14 +2098,19 @@ export default function App() {
                     <label className="label">{tr(lang, "token")}</label>
                     <div className="assetChooser">
                       <div className="assetChooserTop">
-                        <div className="swapAssetPreview">
-                          <div className="tokenLogo swapMiniLogo">
-                            {getAssetLogo(sendAsset) ? <img src={getAssetLogo(sendAsset)} alt={sendAsset} /> : <div className="tokenFallback" />}
-                          </div>
-                          <span>{sendAsset}</span>
-                        </div>
-                        <div className="assetBalance">
-                          {tr(lang, "balance")}: {getBalanceForAsset(sendAsset)}
+                        <div className="assetBadge">
+                          {(() => { const meta = getAssetMeta(sendAsset, TOKENS); return (<>
+                            <div className="assetLogoWrap">
+                              <div className="tokenLogo swapMiniLogo">
+                                {meta.logo ? <img src={meta.logo} alt={sendAsset} /> : <div className="tokenFallback" />}
+                              </div>
+                              <div className="assetInitialBadge">{getTokenInitials(sendAsset)}</div>
+                            </div>
+                            <div className="assetBadgeMeta">
+                              <b>{sendAsset}</b>
+                              <span>{tr(lang, "balance")}: {getBalanceForAsset(sendAsset)}</span>
+                            </div>
+                          </>); })()}
                         </div>
                       </div>
                       <select className="select" value={sendAsset} onChange={(e) => setSendAsset(e.target.value)}>
@@ -2047,7 +2135,7 @@ export default function App() {
                         <span className="tokenBal">{estimatedGasFee ? `${estimatedGasFee} INRI` : "—"}</span>
                       </div>
                       <div className="muted2" style={{ fontSize: 12, marginTop: 8 }}>
-                        {estimatedGasFee ? "Amount paid to process the transaction on network." : tr(lang, "fee_pending")}
+                        {estimatedGasFee ? copy2.amount_paid_note : tr(lang, "fee_pending")}
                       </div>
                     </div>
 
@@ -2073,7 +2161,7 @@ export default function App() {
                         <div className="mono muted2 addrFull">{selected}</div>
                         <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
                           <button className="btn btnPrimary" onClick={() => copy(selected)}>
-                            <Copy size={16} /> Copy
+                            <Copy size={16} /> {copy2.copied.replace(/\.$/, "")}
                           </button>
                           <button className="btn" onClick={() => openExplorerAddress(selected)}>
                             <ExternalLink size={16} /> {tr(lang, "explorer")}
@@ -2103,20 +2191,30 @@ export default function App() {
                         <div className="tokenBal">{Number(balance).toFixed(6)}</div>
                       </div>
 
-                      {TOKENS.map((t) => (
-                        <div key={`${t.symbol}_${t.address}`} className="tokenRow">
-                          <div className="tokenLeft">
-                            <div className="tokenLogo">
-                              {t.logo ? <img src={t.logo} alt={t.symbol} /> : <div className="tokenFallback" />}
+                      {TOKENS.map((t) => {
+                        const isCustom = customTokens.some((ct) => ct.symbol === t.symbol && ct.address === t.address);
+                        return (
+                          <div key={`${t.symbol}_${t.address}`} className="tokenRow">
+                            <div className="tokenLeft">
+                              <div className="tokenLogo">
+                                {t.logo ? <img src={t.logo} alt={t.symbol} /> : <div className="tokenFallback" />}
+                              </div>
+                              <div>
+                                <div className="tokenSym">{t.symbol}</div>
+                                <div className="mono muted2 tokenAddr">{shortAddr(t.address)}</div>
+                              </div>
                             </div>
-                            <div>
-                              <div className="tokenSym">{t.symbol}</div>
-                              <div className="mono muted2 tokenAddr">{shortAddr(t.address)}</div>
+                            <div className="tokenRowActions">
+                              <div className="tokenBal">{tokenBalances[t.symbol] ?? "0.0"}</div>
+                              {isCustom && (
+                                <button className="btn" onClick={() => removeCustomToken(t.symbol, t.address)}>
+                                  <Trash2 size={14} /> {copy2.remove}
+                                </button>
+                              )}
                             </div>
                           </div>
-                          <div className="tokenBal">{tokenBalances[t.symbol] ?? "0.0"}</div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -2179,11 +2277,19 @@ export default function App() {
                       <label className="label">{tr(lang, "from")}</label>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
-                          <div className="swapAssetPreview swapAssetPreviewSolo">
-                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(swapFromAsset)}</div>
-                          </div>
-                          <div className="assetBalance assetBalanceUnder">
-                            {tr(lang, "balance")}: {getBalanceForAsset(swapFromAsset)}
+                          <div className="assetBadge">
+                            {(() => { const meta = getAssetMeta(swapFromAsset, TOKENS); return (<>
+                              <div className="assetLogoWrap">
+                                <div className="tokenLogo swapMiniLogo">
+                                  {meta.logo ? <img src={meta.logo} alt={swapFromAsset} /> : <div className="tokenFallback" />}
+                                </div>
+                                <div className="assetInitialBadge">{getTokenInitials(swapFromAsset)}</div>
+                              </div>
+                              <div className="assetBadgeMeta">
+                                <b>{swapFromAsset}</b>
+                                <span>{tr(lang, "balance")}: {getBalanceForAsset(swapFromAsset)}</span>
+                              </div>
+                            </>); })()}
                           </div>
                         </div>
                         <select className="select" value={swapFromAsset} onChange={(e) => setSwapFromAsset(e.target.value)}>
@@ -2208,11 +2314,19 @@ export default function App() {
                       <label className="label">{tr(lang, "to")}</label>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
-                          <div className="swapAssetPreview swapAssetPreviewSolo">
-                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(swapToAsset)}</div>
-                          </div>
-                          <div className="assetBalance assetBalanceUnder">
-                            {tr(lang, "balance")}: {getBalanceForAsset(swapToAsset)}
+                          <div className="assetBadge">
+                            {(() => { const meta = getAssetMeta(swapToAsset, TOKENS); return (<>
+                              <div className="assetLogoWrap">
+                                <div className="tokenLogo swapMiniLogo">
+                                  {meta.logo ? <img src={meta.logo} alt={swapToAsset} /> : <div className="tokenFallback" />}
+                                </div>
+                                <div className="assetInitialBadge">{getTokenInitials(swapToAsset)}</div>
+                              </div>
+                              <div className="assetBadgeMeta">
+                                <b>{swapToAsset}</b>
+                                <span>{tr(lang, "balance")}: {getBalanceForAsset(swapToAsset)}</span>
+                              </div>
+                            </>); })()}
                           </div>
                         </div>
                         <select className="select" value={swapToAsset} onChange={(e) => setSwapToAsset(e.target.value)}>
@@ -2288,11 +2402,19 @@ export default function App() {
                       <label className="label">{tr(lang, "token")}</label>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
-                          <div className="swapAssetPreview swapAssetPreviewSolo">
-                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(bridgeAsset)}</div>
-                          </div>
-                          <div className="assetBalance assetBalanceUnder">
-                            {tr(lang, "balance")}: {getBalanceForAsset(bridgeAsset)}
+                          <div className="assetBadge">
+                            {(() => { const meta = getAssetMeta(bridgeAsset, TOKENS); return (<>
+                              <div className="assetLogoWrap">
+                                <div className="tokenLogo swapMiniLogo">
+                                  {meta.logo ? <img src={meta.logo} alt={bridgeAsset} /> : <div className="tokenFallback" />}
+                                </div>
+                                <div className="assetInitialBadge">{getTokenInitials(bridgeAsset)}</div>
+                              </div>
+                              <div className="assetBadgeMeta">
+                                <b>{bridgeAsset}</b>
+                                <span>{tr(lang, "balance")}: {getBalanceForAsset(bridgeAsset)}</span>
+                              </div>
+                            </>); })()}
                           </div>
                         </div>
                         <select className="select" value={bridgeAsset} onChange={(e) => setBridgeAsset(e.target.value)}>
@@ -2351,6 +2473,17 @@ export default function App() {
                               {l.label}
                             </option>
                           ))}
+                        </select>
+                      </div>
+
+                      <div className="cardFlat">
+                        <div className="labelRow">
+                          <div className="label">{copy2.appearance}</div>
+                          <span className="muted2">{tr(lang, "global")}</span>
+                        </div>
+                        <select className="select" value={themeMode} onChange={(e) => setThemeMode(e.target.value as ThemeMode)}>
+                          <option value="dark">{copy2.dark_mode}</option>
+                          <option value="silver">{copy2.silver_mode}</option>
                         </select>
                       </div>
 
@@ -2427,6 +2560,30 @@ export default function App() {
                             <Plus size={16} /> {tr(lang, "add_token")}
                           </button>
                         </div>
+
+                        {customTokens.length > 0 && (
+                          <div style={{ marginTop: 14 }}>
+                            <div className="label">{copy2.custom_token_list}</div>
+                            <div className="tokenList">
+                              {customTokens.map((t) => (
+                                <div key={`${t.symbol}_${t.address}_settings`} className="tokenRow">
+                                  <div className="tokenLeft">
+                                    <div className="tokenLogo">
+                                      {t.logo ? <img src={t.logo} alt={t.symbol} /> : <div className="tokenFallback" />}
+                                    </div>
+                                    <div>
+                                      <div className="tokenSym">{t.symbol}</div>
+                                      <div className="mono muted2 tokenAddr">{shortAddr(t.address)}</div>
+                                    </div>
+                                  </div>
+                                  <button className="btn" onClick={() => removeCustomToken(t.symbol, t.address)}>
+                                    <Trash2 size={14} /> {copy2.remove}
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
                         <div className="muted smallTop">{copy2.tip_decimals}</div>
                       </div>
