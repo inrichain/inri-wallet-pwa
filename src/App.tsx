@@ -91,8 +91,8 @@ const TOKENS_KEY = "inri_custom_tokens";
 const TXS_KEY = "inri_local_txs_v2";
 
 const LANGS: { code: Lang; label: string }[] = [
-  { code: "pt", label: "Português" },
   { code: "en", label: "English" },
+  { code: "pt", label: "Português" },
   { code: "es", label: "Español" },
   { code: "fr", label: "Français" },
   { code: "de", label: "Deutsch" },
@@ -410,6 +410,74 @@ function getAssetLogo(symbol: string) {
   return "";
 }
 
+function getTokenInitials(symbol: string) {
+  const clean = (symbol || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  if (!clean) return "??";
+  return clean.slice(0, Math.min(4, clean.length));
+}
+
+function getExtraCopy(lang: Lang) {
+  const copy = {
+    en: {
+      scanner_hint: "Point the camera at a QR code. The wallet address will fill automatically.",
+      online: "Online",
+      offline: "Offline",
+      official_pwa: "Official PWA • INRI CHAIN",
+      wallet: "Wallet",
+      not_unlocked: "Not unlocked",
+      live_balances: "Auto balances (ERC-20)",
+      tip_decimals: "Tip: iUSD = 6 decimals. WINRI/DNR = 18.",
+      new_account_created: "New account created.",
+      symbol_required: "Symbol required.",
+      invalid_token_address: "Invalid token address.",
+      invalid_decimals: "Invalid decimals.",
+      reset: "Reset",
+      preview_contracts: "Fee and final quote will update when real swap contracts are connected.",
+      preview_bridge: "Final bridge fee and route will update when bridge contracts are connected.",
+      bridge_preview: "Bridge preview",
+      bridge_fee_note: "Preview uses your bridge fee of 0.2%.",
+      path: "Path",
+    },
+    pt: {
+      scanner_hint: "Aponte a câmera para um QR code. O endereço será preenchido automaticamente.",
+      online: "Online",
+      offline: "Offline",
+      official_pwa: "PWA oficial • INRI CHAIN",
+      wallet: "Carteira",
+      not_unlocked: "Bloqueada",
+      live_balances: "Saldos automáticos (ERC-20)",
+      tip_decimals: "Dica: iUSD = 6 decimais. WINRI/DNR = 18.",
+      new_account_created: "Nova conta criada.",
+      symbol_required: "Símbolo obrigatório.",
+      invalid_token_address: "Endereço do token inválido.",
+      invalid_decimals: "Decimais inválidos.",
+      reset: "Resetar",
+      preview_contracts: "Taxa e cotação final serão atualizadas quando os contratos reais de swap forem conectados.",
+      preview_bridge: "Taxa final e rota da bridge serão atualizadas quando os contratos da bridge forem conectados.",
+      bridge_preview: "Prévia da bridge",
+      bridge_fee_note: "A prévia usa a sua taxa de bridge de 0,2%.",
+      path: "Caminho",
+    },
+    es: {
+      scanner_hint: "Apunta la cámara al código QR. La dirección se completará automáticamente.",
+      online: "En línea", offline: "Sin conexión", official_pwa: "PWA oficial • INRI CHAIN", wallet: "Billetera", not_unlocked: "Bloqueada", live_balances: "Saldos automáticos (ERC-20)", tip_decimals: "Consejo: iUSD = 6 decimales. WINRI/DNR = 18.", new_account_created: "Nueva cuenta creada.", symbol_required: "Símbolo obligatorio.", invalid_token_address: "Dirección de token inválida.", invalid_decimals: "Decimales inválidos.", reset: "Restablecer", preview_contracts: "La tarifa y la cotización final se actualizarán cuando los contratos reales de swap estén conectados.", preview_bridge: "La tarifa final y la ruta del bridge se actualizarán cuando los contratos del bridge estén conectados.", bridge_preview: "Vista previa del bridge", bridge_fee_note: "La vista previa usa tu tarifa de bridge del 0,2%.", path: "Ruta"
+    },
+    fr: {scanner_hint:"Pointez la caméra vers un QR code. L’adresse sera remplie automatiquement.",online:"En ligne",offline:"Hors ligne",official_pwa:"PWA officiel • INRI CHAIN",wallet:"Portefeuille",not_unlocked:"Verrouillé",live_balances:"Soldes automatiques (ERC-20)",tip_decimals:"Astuce : iUSD = 6 décimales. WINRI/DNR = 18.",new_account_created:"Nouveau compte créé.",symbol_required:"Symbole requis.",invalid_token_address:"Adresse du token invalide.",invalid_decimals:"Décimales invalides.",reset:"Réinitialiser",preview_contracts:"Les frais et le devis final seront mis à jour lorsque les vrais contrats de swap seront connectés.",preview_bridge:"Les frais finaux et l’itinéraire du bridge seront mis à jour lorsque les contrats du bridge seront connectés.",bridge_preview:"Aperçu du bridge",bridge_fee_note:"L’aperçu utilise vos frais de bridge de 0,2 %.",path:"Chemin"},
+    de: {scanner_hint:"Richte die Kamera auf einen QR-Code. Die Adresse wird automatisch ausgefüllt.",online:"Online",offline:"Offline",official_pwa:"Offizielle PWA • INRI CHAIN",wallet:"Wallet",not_unlocked:"Gesperrt",live_balances:"Automatische Guthaben (ERC-20)",tip_decimals:"Hinweis: iUSD = 6 Dezimalstellen. WINRI/DNR = 18.",new_account_created:"Neues Konto erstellt.",symbol_required:"Symbol erforderlich.",invalid_token_address:"Ungültige Token-Adresse.",invalid_decimals:"Ungültige Dezimalstellen.",reset:"Zurücksetzen",preview_contracts:"Gebühr und endgültiges Angebot werden aktualisiert, wenn echte Swap-Verträge verbunden sind.",preview_bridge:"Endgültige Bridge-Gebühr und Route werden aktualisiert, wenn die Bridge-Verträge verbunden sind.",bridge_preview:"Bridge-Vorschau",bridge_fee_note:"Die Vorschau verwendet Ihre Bridge-Gebühr von 0,2 %.",path:"Pfad"},
+    ru: {scanner_hint:"Наведите камеру на QR-код. Адрес заполнится автоматически.",online:"Онлайн",offline:"Офлайн",official_pwa:"Официальный PWA • INRI CHAIN",wallet:"Кошелек",not_unlocked:"Заблокирован",live_balances:"Автобалансы (ERC-20)",tip_decimals:"Подсказка: iUSD = 6 знаков. WINRI/DNR = 18.",new_account_created:"Новый аккаунт создан.",symbol_required:"Требуется символ.",invalid_token_address:"Неверный адрес токена.",invalid_decimals:"Неверные десятичные знаки.",reset:"Сброс",preview_contracts:"Комиссия и финальная котировка обновятся после подключения реальных swap-контрактов.",preview_bridge:"Финальная комиссия и маршрут bridge обновятся после подключения bridge-контрактов.",bridge_preview:"Предпросмотр bridge",bridge_fee_note:"Предпросмотр использует вашу комиссию bridge 0,2 %.",path:"Путь"},
+    tr: {scanner_hint:"Kamerayı QR koda doğrultun. Cüzdan adresi otomatik doldurulur.",online:"Çevrimiçi",offline:"Çevrimdışı",official_pwa:"Resmi PWA • INRI CHAIN",wallet:"Cüzdan",not_unlocked:"Kilitli",live_balances:"Otomatik bakiyeler (ERC-20)",tip_decimals:"İpucu: iUSD = 6 ondalık. WINRI/DNR = 18.",new_account_created:"Yeni hesap oluşturuldu.",symbol_required:"Sembol gerekli.",invalid_token_address:"Geçersiz token adresi.",invalid_decimals:"Geçersiz ondalık.",reset:"Sıfırla",preview_contracts:"Gerçek swap sözleşmeleri bağlandığında ücret ve nihai teklif güncellenecek.",preview_bridge:"Gerçek bridge sözleşmeleri bağlandığında nihai bridge ücreti ve rota güncellenecek.",bridge_preview:"Bridge önizleme",bridge_fee_note:"Önizleme, %0,2 bridge ücretinizi kullanır.",path:"Yol"},
+    ar: {scanner_hint:"وجّه الكاميرا إلى رمز QR وسيتم تعبئة العنوان تلقائيًا.",online:"متصل",offline:"غير متصل",official_pwa:"تطبيق PWA الرسمي • INRI CHAIN",wallet:"المحفظة",not_unlocked:"مقفلة",live_balances:"الأرصدة التلقائية (ERC-20)",tip_decimals:"ملاحظة: iUSD = 6 منازل عشرية. WINRI/DNR = 18.",new_account_created:"تم إنشاء حساب جديد.",symbol_required:"الرمز مطلوب.",invalid_token_address:"عنوان التوكن غير صالح.",invalid_decimals:"المنازل العشرية غير صالحة.",reset:"إعادة تعيين",preview_contracts:"سيتم تحديث الرسوم والسعر النهائي عند ربط عقود المبادلة الحقيقية.",preview_bridge:"سيتم تحديث رسوم الجسر النهائية والمسار عند ربط عقود الجسر.",bridge_preview:"معاينة الجسر",bridge_fee_note:"تستخدم المعاينة رسوم الجسر الخاصة بك 0.2٪.",path:"المسار"},
+    hi: {scanner_hint:"कैमरा QR कोड पर रखें। वॉलेट पता अपने आप भर जाएगा।",online:"ऑनलाइन",offline:"ऑफ़लाइन",official_pwa:"आधिकारिक PWA • INRI CHAIN",wallet:"वॉलेट",not_unlocked:"लॉक",live_balances:"ऑटो बैलेंस (ERC-20)",tip_decimals:"टिप: iUSD = 6 दशमलव। WINRI/DNR = 18.",new_account_created:"नया खाता बनाया गया।",symbol_required:"सिंबल आवश्यक है।",invalid_token_address:"अमान्य टोकन पता।",invalid_decimals:"अमान्य दशमलव।",reset:"रीसेट",preview_contracts:"जब वास्तविक swap कॉन्ट्रैक्ट जुड़ेंगे तब शुल्क और अंतिम quote अपडेट होगा।",preview_bridge:"जब bridge कॉन्ट्रैक्ट जुड़ेंगे तब अंतिम bridge शुल्क और route अपडेट होगा।",bridge_preview:"Bridge प्रीव्यू",bridge_fee_note:"प्रीव्यू आपकी 0.2% bridge फीस का उपयोग करता है।",path:"पाथ"},
+    id: {scanner_hint:"Arahkan kamera ke kode QR. Alamat dompet akan terisi otomatis.",online:"Online",offline:"Offline",official_pwa:"PWA resmi • INRI CHAIN",wallet:"Dompet",not_unlocked:"Terkunci",live_balances:"Saldo otomatis (ERC-20)",tip_decimals:"Tip: iUSD = 6 desimal. WINRI/DNR = 18.",new_account_created:"Akun baru dibuat.",symbol_required:"Simbol wajib diisi.",invalid_token_address:"Alamat token tidak valid.",invalid_decimals:"Desimal tidak valid.",reset:"Reset",preview_contracts:"Biaya dan kuotasi akhir akan diperbarui saat kontrak swap nyata terhubung.",preview_bridge:"Biaya bridge akhir dan rute akan diperbarui saat kontrak bridge terhubung.",bridge_preview:"Pratinjau bridge",bridge_fee_note:"Pratinjau menggunakan biaya bridge 0,2% Anda.",path:"Path"},
+    vi: {scanner_hint:"Hướng camera vào mã QR. Địa chỉ ví sẽ được điền tự động.",online:"Trực tuyến",offline:"Ngoại tuyến",official_pwa:"PWA chính thức • INRI CHAIN",wallet:"Ví",not_unlocked:"Đã khóa",live_balances:"Số dư tự động (ERC-20)",tip_decimals:"Mẹo: iUSD = 6 số thập phân. WINRI/DNR = 18.",new_account_created:"Đã tạo tài khoản mới.",symbol_required:"Cần ký hiệu.",invalid_token_address:"Địa chỉ token không hợp lệ.",invalid_decimals:"Số thập phân không hợp lệ.",reset:"Đặt lại",preview_contracts:"Phí và báo giá cuối cùng sẽ cập nhật khi các hợp đồng swap thật được kết nối.",preview_bridge:"Phí bridge cuối cùng và tuyến sẽ cập nhật khi các hợp đồng bridge được kết nối.",bridge_preview:"Xem trước bridge",bridge_fee_note:"Bản xem trước dùng phí bridge 0,2% của bạn.",path:"Đường dẫn"},
+    th: {scanner_hint:"หันกล้องไปที่คิวอาร์โค้ด ระบบจะกรอกที่อยู่ให้อัตโนมัติ",online:"ออนไลน์",offline:"ออฟไลน์",official_pwa:"PWA อย่างเป็นทางการ • INRI CHAIN",wallet:"กระเป๋า",not_unlocked:"ล็อกอยู่",live_balances:"ยอดคงเหลืออัตโนมัติ (ERC-20)",tip_decimals:"เคล็ดลับ: iUSD = 6 ตำแหน่งทศนิยม WINRI/DNR = 18",new_account_created:"สร้างบัญชีใหม่แล้ว",symbol_required:"ต้องใส่สัญลักษณ์",invalid_token_address:"ที่อยู่โทเคนไม่ถูกต้อง",invalid_decimals:"จำนวนทศนิยมไม่ถูกต้อง",reset:"รีเซ็ต",preview_contracts:"ค่าธรรมเนียมและราคาสุดท้ายจะอัปเดตเมื่อเชื่อมต่อสัญญา swap จริง",preview_bridge:"ค่าธรรมเนียม bridge และเส้นทางสุดท้ายจะอัปเดตเมื่อเชื่อมต่อสัญญา bridge",bridge_preview:"พรีวิว bridge",bridge_fee_note:"พรีวิวนี้ใช้ค่าธรรมเนียม bridge ของคุณ 0.2%",path:"พาธ"},
+    zh: {scanner_hint:"将相机对准二维码，钱包地址会自动填入。",online:"在线",offline:"离线",official_pwa:"官方 PWA • INRI CHAIN",wallet:"钱包",not_unlocked:"未解锁",live_balances:"自动余额（ERC-20）",tip_decimals:"提示：iUSD = 6 位小数。WINRI/DNR = 18。",new_account_created:"新账户已创建。",symbol_required:"必须填写符号。",invalid_token_address:"无效的代币地址。",invalid_decimals:"无效的小数位。",reset:"重置",preview_contracts:"连接真实的 swap 合约后，费用和最终报价会更新。",preview_bridge:"连接 bridge 合约后，最终 bridge 费用和路由会更新。",bridge_preview:"Bridge 预览",bridge_fee_note:"预览使用你的 0.2% bridge 费率。",path:"路径"},
+    ja: {scanner_hint:"カメラをQRコードに向けると、ウォレットアドレスが自動入力されます。",online:"オンライン",offline:"オフライン",official_pwa:"公式PWA • INRI CHAIN",wallet:"ウォレット",not_unlocked:"未解除",live_balances:"自動残高 (ERC-20)",tip_decimals:"ヒント: iUSD = 6桁。WINRI/DNR = 18。",new_account_created:"新しいアカウントを作成しました。",symbol_required:"シンボルは必須です。",invalid_token_address:"無効なトークンアドレスです。",invalid_decimals:"無効な小数桁です。",reset:"リセット",preview_contracts:"実際のswapコントラクトが接続されると、手数料と最終見積もりが更新されます。",preview_bridge:"bridgeコントラクトが接続されると、最終bridge手数料とルートが更新されます。",bridge_preview:"Bridgeプレビュー",bridge_fee_note:"プレビューでは0.2%のbridge手数料を使用します。",path:"パス"},
+    ko: {scanner_hint:"카메라를 QR 코드에 맞추면 지갑 주소가 자동으로 입력됩니다.",online:"온라인",offline:"오프라인",official_pwa:"공식 PWA • INRI CHAIN",wallet:"지갑",not_unlocked:"잠김",live_balances:"자동 잔액 (ERC-20)",tip_decimals:"팁: iUSD = 소수점 6자리, WINRI/DNR = 18자리입니다.",new_account_created:"새 계정이 생성되었습니다.",symbol_required:"심볼이 필요합니다.",invalid_token_address:"잘못된 토큰 주소입니다.",invalid_decimals:"잘못된 소수 자릿수입니다.",reset:"재설정",preview_contracts:"실제 swap 계약이 연결되면 수수료와 최종 견적이 업데이트됩니다.",preview_bridge:"bridge 계약이 연결되면 최종 bridge 수수료와 경로가 업데이트됩니다.",bridge_preview:"Bridge 미리보기",bridge_fee_note:"미리보기에는 0.2% bridge 수수료가 적용됩니다.",path:"경로"},
+  } as const;
+  return copy[lang] ?? copy.en;
+}
+
 function loadLocalTxs(): LocalTx[] {
   try {
     return JSON.parse(localStorage.getItem(TXS_KEY) || "[]");
@@ -466,7 +534,7 @@ function computeBridgeReceive(amount: string, feeBps = 20) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState<Lang>(() => (localStorage.getItem(LANG_KEY) as Lang) || "pt");
+  const [lang, setLang] = useState<Lang>(() => (localStorage.getItem(LANG_KEY) as Lang) || "en");
 
   const [view, setView] = useState<View>(loadVault() ? "unlock" : "welcome");
   const [tab, setTab] = useState<Tab>("dashboard");
@@ -554,6 +622,8 @@ export default function App() {
     () => computeBridgeReceive(bridgeAmount, 20),
     [bridgeAmount]
   );
+
+  const copy2 = useMemo(() => getExtraCopy(lang), [lang]);
 
   function showToast(msg: string) {
     setToast(msg);
@@ -899,9 +969,9 @@ export default function App() {
     const addr = tokAddr.trim();
     const dec = Number(tokDec);
 
-    if (!sym) return showToast("Symbol required.");
-    if (!ethers.isAddress(addr)) return showToast("Invalid token address.");
-    if (!Number.isFinite(dec) || dec < 0 || dec > 36) return showToast("Invalid decimals.");
+    if (!sym) return showToast(copy2.symbol_required);
+    if (!ethers.isAddress(addr)) return showToast(copy2.invalid_token_address);
+    if (!Number.isFinite(dec) || dec < 0 || dec > 36) return showToast(copy2.invalid_decimals);
 
     const token: Token = {
       symbol: sym,
@@ -923,7 +993,7 @@ export default function App() {
 
   function createAnotherAccount() {
     setAccountCount((v) => v + 1);
-    showToast("New account created.");
+    showToast(copy2.new_account_created);
   }
 
   function switchSwapAssets() {
@@ -940,27 +1010,40 @@ export default function App() {
       const reader = new BrowserMultiFormatReader();
       readerRef.current = reader;
 
+      await new Promise((resolve) => setTimeout(resolve, 80));
       const video = document.getElementById("qrVideo") as HTMLVideoElement | null;
       if (!video) throw new Error("no video");
 
       const devices = await BrowserMultiFormatReader.listVideoInputDevices();
-      const deviceId = devices?.[0]?.deviceId;
+      const backCamera = devices.find((d) => /back|rear|environment/gi.test(`${d.label} ${d.deviceId}`));
+      const frontCamera = devices[0];
 
-      await reader.decodeFromVideoDevice(deviceId, video, (result: any) => {
+      const constraints: MediaStreamConstraints = {
+        audio: false,
+        video: backCamera?.deviceId
+          ? { deviceId: { exact: backCamera.deviceId } }
+          : {
+              facingMode: { ideal: "environment" },
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+      };
+
+      await reader.decodeFromConstraints(constraints, video, (result: any) => {
         if (result?.getText) {
           const txt = result.getText();
           const m = txt.match(/0x[a-fA-F0-9]{40}/);
           if (m?.[0]) {
             setSendTo(m[0]);
             setTab("send");
-            setScanOpen(false);
-            setScanBusy(false);
-            reader.reset();
+            stopScan();
             showToast(tr(lang, "qr_ok"));
           }
         }
       });
-    } catch {
+
+    } catch (error) {
+      console.error(error);
       showToast(tr(lang, "camera_fail"));
       setScanOpen(false);
       setScanBusy(false);
@@ -1000,7 +1083,7 @@ export default function App() {
             <b>INRI CHAIN</b>
             <div className="muted2">ChainId {INRI.chainIdDec}</div>
           </div>
-          {networkOk ? <span className="badgeOk">Online</span> : <span className="badgeBad">Offline</span>}
+          {networkOk ? <span className="badgeOk">{copy2.online}</span> : <span className="badgeBad">{copy2.offline}</span>}
         </div>
 
         <div className="drawerBody">
@@ -1043,7 +1126,7 @@ export default function App() {
             </div>
 
             <div className="muted2 smallTop">
-              Path: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
+              {copy2.path}: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
             </div>
           </div>
 
@@ -1634,13 +1717,38 @@ export default function App() {
           color:var(--text);
           font-weight:700;
         }
+        .swapAssetPreviewSolo{
+          justify-content:flex-start;
+        }
+        .assetChooserTopStack{
+          display:flex;
+          flex-direction:column;
+          align-items:flex-start;
+          gap:8px;
+        }
         .swapMiniLogo{
-          width:26px;
-          height:26px;
+          width:32px;
+          height:32px;
+        }
+        .tokenInitialOnly{
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:11px;
+          font-weight:700;
+          letter-spacing:.4px;
+          background:linear-gradient(180deg,#142033,#0c1220);
+          border:1px solid var(--line);
+          color:var(--text);
+          overflow:hidden;
         }
         .assetBalance{
           font-size:12px;
           color:var(--muted);
+        }
+        .assetBalanceUnder{
+          padding-left:0;
+          line-height:1.2;
         }
         @media (max-width: 1120px){
           .appShell{
@@ -1686,7 +1794,7 @@ export default function App() {
             <img className="brandLogo" src={assetUrl("favicon.png")} alt="INRI" />
             <div className="brandTxt">
               <b>INRI Wallet</b>
-              <span>Official PWA • INRI CHAIN</span>
+              <span>{copy2.official_pwa}</span>
             </div>
           </div>
 
@@ -1724,7 +1832,7 @@ export default function App() {
                 </button>
               ) : (
                 <button className="btn" onClick={resetLocal}>
-                  <Trash2 size={16} /> Reset
+                  <Trash2 size={16} /> {copy2.reset}
                 </button>
               )}
 
@@ -1979,7 +2087,7 @@ export default function App() {
                 {tab === "tokens" && (
                   <div className="card">
                     <div className="sectionTitle">{tr(lang, "tokens")}</div>
-                    <div className="muted smallTop">Auto balances (ERC-20)</div>
+                    <div className="muted smallTop">{copy2.live_balances}</div>
 
                     <div className="tokenList">
                       <div className="tokenRow">
@@ -2070,14 +2178,11 @@ export default function App() {
                     <div className="cardFlat">
                       <label className="label">{tr(lang, "from")}</label>
                       <div className="assetChooser">
-                        <div className="assetChooserTop">
-                          <div className="swapAssetPreview">
-                            <div className="tokenLogo swapMiniLogo">
-                              {getAssetLogo(swapFromAsset) ? <img src={getAssetLogo(swapFromAsset)} alt={swapFromAsset} /> : <div className="tokenFallback" />}
-                            </div>
-                            <span>{swapFromAsset}</span>
+                        <div className="assetChooserTop assetChooserTopStack">
+                          <div className="swapAssetPreview swapAssetPreviewSolo">
+                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(swapFromAsset)}</div>
                           </div>
-                          <div className="assetBalance">
+                          <div className="assetBalance assetBalanceUnder">
                             {tr(lang, "balance")}: {getBalanceForAsset(swapFromAsset)}
                           </div>
                         </div>
@@ -2102,14 +2207,11 @@ export default function App() {
 
                       <label className="label">{tr(lang, "to")}</label>
                       <div className="assetChooser">
-                        <div className="assetChooserTop">
-                          <div className="swapAssetPreview">
-                            <div className="tokenLogo swapMiniLogo">
-                              {getAssetLogo(swapToAsset) ? <img src={getAssetLogo(swapToAsset)} alt={swapToAsset} /> : <div className="tokenFallback" />}
-                            </div>
-                            <span>{swapToAsset}</span>
+                        <div className="assetChooserTop assetChooserTopStack">
+                          <div className="swapAssetPreview swapAssetPreviewSolo">
+                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(swapToAsset)}</div>
                           </div>
-                          <div className="assetBalance">
+                          <div className="assetBalance assetBalanceUnder">
                             {tr(lang, "balance")}: {getBalanceForAsset(swapToAsset)}
                           </div>
                         </div>
@@ -2139,7 +2241,7 @@ export default function App() {
                           <span className="tokenBal">preview</span>
                         </div>
                         <div className="muted2" style={{ fontSize: 12, marginTop: 8 }}>
-                          Fee and final quote will update when real swap contracts are connected.
+                          {copy2.preview_contracts}
                         </div>
                       </div>
 
@@ -2185,14 +2287,11 @@ export default function App() {
 
                       <label className="label">{tr(lang, "token")}</label>
                       <div className="assetChooser">
-                        <div className="assetChooserTop">
-                          <div className="swapAssetPreview">
-                            <div className="tokenLogo swapMiniLogo">
-                              {getAssetLogo(bridgeAsset) ? <img src={getAssetLogo(bridgeAsset)} alt={bridgeAsset} /> : <div className="tokenFallback" />}
-                            </div>
-                            <span>{bridgeAsset}</span>
+                        <div className="assetChooserTop assetChooserTopStack">
+                          <div className="swapAssetPreview swapAssetPreviewSolo">
+                            <div className="tokenLogo swapMiniLogo tokenInitialOnly">{getTokenInitials(bridgeAsset)}</div>
                           </div>
-                          <div className="assetBalance">
+                          <div className="assetBalance assetBalanceUnder">
                             {tr(lang, "balance")}: {getBalanceForAsset(bridgeAsset)}
                           </div>
                         </div>
@@ -2213,17 +2312,17 @@ export default function App() {
                           <span className="tokenBal">{bridgeReceivePreview} {bridgeAsset}</span>
                         </div>
                         <div className="muted2" style={{ fontSize: 12, marginTop: 8 }}>
-                          Preview uses your bridge fee of 0.2%.
+                          {copy2.bridge_fee_note}
                         </div>
                       </div>
 
                       <div className="feeBox">
                         <div className="labelRow">
                           <div className="label" style={{ margin: 0 }}>{tr(lang, "estimated_fee")}</div>
-                          <span className="tokenBal">bridge preview</span>
+                          <span className="tokenBal">{copy2.bridge_preview}</span>
                         </div>
                         <div className="muted2" style={{ fontSize: 12, marginTop: 8 }}>
-                          Final bridge fee and route will update when bridge contracts are connected.
+                          {copy2.preview_bridge}
                         </div>
                       </div>
 
@@ -2329,7 +2428,7 @@ export default function App() {
                           </button>
                         </div>
 
-                        <div className="muted smallTop">Dica: iUSD = 6 decimais. WINRI/DNR = 18.</div>
+                        <div className="muted smallTop">{copy2.tip_decimals}</div>
                       </div>
 
                       <div className="cardFlat">
@@ -2343,7 +2442,7 @@ export default function App() {
                             <Lock size={16} /> {tr(lang, "logout")}
                           </button>
                           <button className="btn" onClick={resetLocal}>
-                            <Trash2 size={16} /> Reset
+                            <Trash2 size={16} /> {copy2.reset}
                           </button>
                         </div>
                       </div>
@@ -2361,7 +2460,7 @@ export default function App() {
               <b>INRI CHAIN</b>
               <div className="muted2">ChainId {INRI.chainIdDec}</div>
             </div>
-            {networkOk ? <span className="badgeOk">Online</span> : <span className="badgeBad">Offline</span>}
+            {networkOk ? <span className="badgeOk">{copy2.online}</span> : <span className="badgeBad">{copy2.offline}</span>}
           </div>
 
           <div className="drawerBody">
@@ -2371,7 +2470,7 @@ export default function App() {
                   {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
                 </div>
                 <div>
-                  <div className="pillTitle">{view === "wallet" ? "Wallet" : "Not unlocked"}</div>
+                  <div className="pillTitle">{view === "wallet" ? copy2.wallet : copy2.not_unlocked}</div>
                   <div className="mono muted2 pillSub">{view === "wallet" ? shortAddr(selected) : "—"}</div>
                 </div>
               </div>
@@ -2406,7 +2505,7 @@ export default function App() {
               </div>
 
               <div className="muted2 smallTop">
-                Path: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
+                {copy2.path}: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
               </div>
             </div>
 
@@ -2459,7 +2558,7 @@ export default function App() {
               </button>
             </div>
             <video id="qrVideo" className="qrVideo" />
-            <div className="muted smallTop">Point camera to QR. It will fill the address automatically.</div>
+            <div className="muted smallTop">{copy2.scanner_hint}</div>
           </div>
         </div>
       )}
