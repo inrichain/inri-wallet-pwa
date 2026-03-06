@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "auto",
       includeAssets: [
         "favicon.png",
         "apple-touch-icon.png",
@@ -18,13 +19,18 @@ export default defineConfig({
         "token-winri.png",
         "token-dnr.png"
       ],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"]
+      },
       manifest: {
+        id: "/inri-wallet-pwa/",
         name: "INRI Wallet",
         short_name: "INRI Wallet",
         description: "Official INRI Wallet PWA",
         theme_color: "#0b0b0f",
         background_color: "#0b0b0f",
         display: "standalone",
+        orientation: "portrait",
         scope: "/inri-wallet-pwa/",
         start_url: "/inri-wallet-pwa/",
         icons: [
@@ -37,6 +43,12 @@ export default defineConfig({
             src: "/inri-wallet-pwa/pwa-512.png",
             sizes: "512x512",
             type: "image/png"
+          },
+          {
+            src: "/inri-wallet-pwa/pwa-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable"
           },
           {
             src: "/inri-wallet-pwa/apple-touch-icon.png",
