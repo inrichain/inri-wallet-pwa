@@ -57,7 +57,7 @@ type Lang =
   | "ko";
 
 type View = "welcome" | "unlock" | "wallet";
-type ThemeMode = "dark" | "silver";
+type ThemeMode = "dark";
 type Tab =
   | "dashboard"
   | "send"
@@ -582,7 +582,7 @@ function computeBridgeReceive(amount: string, feeBps = 20) {
 
 export default function App() {
   const [lang, setLang] = useState<Lang>(() => (localStorage.getItem(LANG_KEY) as Lang) || "en");
-  const [themeMode, setThemeMode] = useState<ThemeMode>(() => (localStorage.getItem(THEME_KEY) as ThemeMode) || "dark");
+  const themeMode: ThemeMode = "dark";
 
   const [view, setView] = useState<View>(loadVault() ? "unlock" : "welcome");
   const [tab, setTab] = useState<Tab>("dashboard");
@@ -1137,67 +1137,24 @@ export default function App() {
     return tokenBalances[symbol] ?? "0.0";
   }
 
+  function isCustomTokenSelected(symbol: string) {
+    return customTokens.some((t) => t.symbol === symbol);
+  }
+
+  function removeCustomTokenBySymbol(symbol: string) {
+    const found = customTokens.find((t) => t.symbol === symbol);
+    if (!found) return;
+    removeCustomToken(found.symbol, found.address);
+  }
+
   const mobileAccountPanel =
     view === "wallet" ? (
-      <div className="mobileDrawer">
-        <div className="drawerHead">
-          <div>
-            <b>INRI CHAIN</b>
-            <div className="muted2">ChainId {INRI.chainIdDec}</div>
+      <div className="mobileTopAvatar">
+        <button className="mobileAvatarBtn" onClick={() => setTab("settings")} aria-label="Open avatar settings">
+          <div className="avatarPill">
+            {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
           </div>
-          {networkOk ? <span className="badgeOk">{copy2.online}</span> : <span className="badgeBad">{copy2.offline}</span>}
-        </div>
-
-        <div className="drawerBody">
-          <div className="accountPill">
-            <div className="accountLeft">
-              <div className="avatarPill">
-                {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
-              </div>
-              <div>
-                <div className="pillTitle">{copy2.wallet}</div>
-                <div className="mono muted2 pillSub">{shortAddr(selected)}</div>
-              </div>
-            </div>
-
-            <button className="btn btnGhost" onClick={() => copy(selected)}>
-              <Copy size={16} />
-            </button>
-          </div>
-
-          <div className="cardFlat">
-            <div className="labelRow">
-              <div className="label">{tr(lang, "account_switcher")}</div>
-            </div>
-
-            <select className="select" value={selectedIndex} onChange={(e) => setSelectedIndex(Number(e.target.value))}>
-              {accounts.map((a) => (
-                <option key={a.index} value={a.index}>
-                  Account {a.index} — {a.address.slice(0, 8)}…{a.address.slice(-6)}
-                </option>
-              ))}
-            </select>
-
-            <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
-              <button className="btn" onClick={() => setAccountCount(Math.max(1, accountCount - 1))}>
-                - Account
-              </button>
-              <button className="btn" onClick={createAnotherAccount}>
-                + {tr(lang, "create_account")}
-              </button>
-            </div>
-
-            <div className="muted2 smallTop">
-              {copy2.path}: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
-            </div>
-          </div>
-
-          <div className="cardFlat">
-            <div className="muted">{tr(lang, "balance")}</div>
-            <div className="balBig">{Number(balance).toFixed(6)}</div>
-            <div className="muted2">INRI</div>
-          </div>
-        </div>
+        </button>
       </div>
     ) : null;
 
@@ -1233,19 +1190,6 @@ export default function App() {
           background:linear-gradient(180deg,#0b0b0f 0%, #0a0f1a 100%);
           color:var(--text);
           transition:background .2s ease,color .2s ease;
-        }
-        body[data-theme="silver"]{
-          --bg:#dfe3ea;
-          --panel:#f5f7fb;
-          --panel2:#eef1f6;
-          --panel3:#e4e9f1;
-          --line:#c6cfdb;
-          --text:#111827;
-          --muted:#5f6b7c;
-          --accent:#446dff;
-          --accent2:#6389ff;
-          --shadow:0 10px 28px rgba(44,60,84,.10);
-          background:linear-gradient(180deg,#e8edf5 0%, #d7dde7 100%);
         }
         .mono{
           font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
@@ -1623,6 +1567,8 @@ export default function App() {
           padding:16px 14px;
         }
         .mobileDrawer{display:none}
+        .mobileTopAvatar{display:none}
+        .mobileAvatarBtn{border:0;background:transparent;padding:0;cursor:pointer;display:flex;justify-content:flex-end;width:100%}
         .drawerHead{
           display:flex;
           justify-content:space-between;
@@ -1865,6 +1811,17 @@ export default function App() {
           .mainHeader{
             border-radius:16px;
           }
+          .mobileTopAvatar{
+            display:flex;
+            justify-content:flex-end;
+            margin-bottom:10px;
+          }
+          .mobileTopAvatar .avatarPill{
+            width:52px;
+            height:52px;
+            border-radius:16px;
+            box-shadow:var(--shadow);
+          }
           .card,.cardFlat{
             border-radius:16px;
           }
@@ -2096,6 +2053,9 @@ export default function App() {
                     </div>
 
                     <label className="label">{tr(lang, "token")}</label>
+                    <div className="label muted2" style={{ marginTop: 0, marginBottom: 8 }}>
+                      {tr(lang, "balance")}: {getBalanceForAsset(sendAsset)}
+                    </div>
                     <div className="assetChooser">
                       <div className="assetChooserTop">
                         <div className="assetBadge">
@@ -2108,7 +2068,6 @@ export default function App() {
                             </div>
                             <div className="assetBadgeMeta">
                               <b>{sendAsset}</b>
-                              <span>{tr(lang, "balance")}: {getBalanceForAsset(sendAsset)}</span>
                             </div>
                           </>); })()}
                         </div>
@@ -2121,6 +2080,13 @@ export default function App() {
                           </option>
                         ))}
                       </select>
+                      {isCustomTokenSelected(sendAsset) && (
+                        <div style={{ marginTop: 10 }}>
+                          <button className="btn" onClick={() => removeCustomTokenBySymbol(sendAsset)}>
+                            <Trash2 size={14} /> {copy2.remove}
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <label className="label">{tr(lang, "to")}</label>
@@ -2275,6 +2241,9 @@ export default function App() {
 
                     <div className="cardFlat">
                       <label className="label">{tr(lang, "from")}</label>
+                      <div className="label muted2" style={{ marginTop: 0, marginBottom: 8 }}>
+                        {tr(lang, "balance")}: {getBalanceForAsset(swapFromAsset)}
+                      </div>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
                           <div className="assetBadge">
@@ -2287,7 +2256,6 @@ export default function App() {
                               </div>
                               <div className="assetBadgeMeta">
                                 <b>{swapFromAsset}</b>
-                                <span>{tr(lang, "balance")}: {getBalanceForAsset(swapFromAsset)}</span>
                               </div>
                             </>); })()}
                           </div>
@@ -2300,6 +2268,13 @@ export default function App() {
                             </option>
                           ))}
                         </select>
+                        {isCustomTokenSelected(swapFromAsset) && (
+                          <div style={{ marginTop: 10 }}>
+                            <button className="btn" onClick={() => removeCustomTokenBySymbol(swapFromAsset)}>
+                              <Trash2 size={14} /> {copy2.remove}
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       <label className="label">{tr(lang, "amount")}</label>
@@ -2312,6 +2287,9 @@ export default function App() {
                       </div>
 
                       <label className="label">{tr(lang, "to")}</label>
+                      <div className="label muted2" style={{ marginTop: 0, marginBottom: 8 }}>
+                        {tr(lang, "balance")}: {getBalanceForAsset(swapToAsset)}
+                      </div>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
                           <div className="assetBadge">
@@ -2324,7 +2302,6 @@ export default function App() {
                               </div>
                               <div className="assetBadgeMeta">
                                 <b>{swapToAsset}</b>
-                                <span>{tr(lang, "balance")}: {getBalanceForAsset(swapToAsset)}</span>
                               </div>
                             </>); })()}
                           </div>
@@ -2337,6 +2314,13 @@ export default function App() {
                             </option>
                           ))}
                         </select>
+                        {isCustomTokenSelected(swapToAsset) && (
+                          <div style={{ marginTop: 10 }}>
+                            <button className="btn" onClick={() => removeCustomTokenBySymbol(swapToAsset)}>
+                              <Trash2 size={14} /> {copy2.remove}
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       <div className="quoteBox">
@@ -2400,6 +2384,9 @@ export default function App() {
                       </select>
 
                       <label className="label">{tr(lang, "token")}</label>
+                      <div className="label muted2" style={{ marginTop: 0, marginBottom: 8 }}>
+                        {tr(lang, "balance")}: {getBalanceForAsset(bridgeAsset)}
+                      </div>
                       <div className="assetChooser">
                         <div className="assetChooserTop assetChooserTopStack">
                           <div className="assetBadge">
@@ -2412,17 +2399,25 @@ export default function App() {
                               </div>
                               <div className="assetBadgeMeta">
                                 <b>{bridgeAsset}</b>
-                                <span>{tr(lang, "balance")}: {getBalanceForAsset(bridgeAsset)}</span>
                               </div>
                             </>); })()}
                           </div>
                         </div>
                         <select className="select" value={bridgeAsset} onChange={(e) => setBridgeAsset(e.target.value)}>
-                          <option value="iUSD">iUSD</option>
                           <option value="INRI">INRI</option>
-                          <option value="WINRI">WINRI</option>
-                          <option value="DNR">DNR</option>
+                          {TOKENS.map((t) => (
+                            <option key={`bridge-${t.symbol}`} value={t.symbol}>
+                              {t.symbol}
+                            </option>
+                          ))}
                         </select>
+                        {isCustomTokenSelected(bridgeAsset) && (
+                          <div style={{ marginTop: 10 }}>
+                            <button className="btn" onClick={() => removeCustomTokenBySymbol(bridgeAsset)}>
+                              <Trash2 size={14} /> {copy2.remove}
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       <label className="label">{tr(lang, "amount")}</label>
@@ -2473,17 +2468,6 @@ export default function App() {
                               {l.label}
                             </option>
                           ))}
-                        </select>
-                      </div>
-
-                      <div className="cardFlat">
-                        <div className="labelRow">
-                          <div className="label">{copy2.appearance}</div>
-                          <span className="muted2">{tr(lang, "global")}</span>
-                        </div>
-                        <select className="select" value={themeMode} onChange={(e) => setThemeMode(e.target.value as ThemeMode)}>
-                          <option value="dark">{copy2.dark_mode}</option>
-                          <option value="silver">{copy2.silver_mode}</option>
                         </select>
                       </div>
 
