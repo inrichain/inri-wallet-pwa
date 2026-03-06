@@ -20,7 +20,6 @@ import {
   ArrowLeftRight,
   User,
   Plus,
-  Globe,
 } from "lucide-react";
 
 import { INRI } from "./lib/inri";
@@ -33,6 +32,12 @@ import {
   saveVault,
 } from "./lib/cryptoVault";
 import { deriveAddressesFromMnemonic, walletFromMnemonicIndex } from "./lib/walletDerive";
+
+const ASSET_BASE = import.meta.env.BASE_URL;
+
+function assetUrl(file: string) {
+  return `${ASSET_BASE}${file}`;
+}
 
 type Lang =
   | "en"
@@ -342,1049 +347,22 @@ const EN: Record<UIKey, string> = {
   network: "Network",
 };
 
-const ES: Record<UIKey, string> = {
-  dashboard: "Panel",
-  send: "Enviar",
-  receive: "Recibir",
-  tokens: "Tokens",
-  activity: "Actividad",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Configuración",
-  create: "Crear",
-  import: "Importar",
-  unlock: "Desbloquear",
-  password: "Contraseña",
-  confirm: "Confirmar",
-  seed_new: "Nueva seed (12 palabras)",
-  seed_import: "Frase seed",
-  secure_enter: "Proteger y Entrar",
-  generate: "Generar",
-  copied: "Copiado.",
-  scan_qr: "Escanear QR",
-  keep_session: "Mantener sesión abierta",
-  logout: "Bloquear",
-  total_balance: "Saldo total",
-  refresh_tokens: "Actualizar Tokens",
-  refresh_activity: "Actualizar Actividad",
-  send_token: "Enviar Activo",
-  token: "Activo",
-  to: "Para",
-  amount: "Cantidad",
-  sending: "Enviando...",
-  need_gas: "Necesita INRI para gas.",
-  your_address: "Tu dirección",
-  explorer: "Explorer",
-  add_token: "Agregar token",
-  custom_tokens: "Tokens manuales",
-  token_symbol: "Símbolo",
-  token_decimals: "Decimales",
-  token_address: "Dirección del token",
-  token_logo: "Logo (opcional)",
-  token_added: "Token agregado.",
-  avatar: "Avatar",
-  change_avatar: "Cambiar avatar",
-  remove_avatar: "Eliminar avatar",
-  coming_soon: "Próximamente (UI lista).",
-  delete_vault_confirm: "¿Eliminar vault local? Necesitas la seed para restaurar.",
-  wrong_password: "Contraseña incorrecta.",
-  no_vault: "No se encontró vault local.",
-  invalid_seed: "Seed inválida.",
-  pw_min: "La contraseña debe tener al menos 8 caracteres.",
-  pw_match: "Las contraseñas no coinciden.",
-  invalid_addr: "Dirección inválida.",
-  invalid_amount: "Cantidad inválida.",
-  amount_gt0: "La cantidad debe ser mayor que 0.",
-  camera_fail: "No se pudo usar la cámara.",
-  qr_ok: "QR capturado.",
-  create_account: "Crear Cuenta",
-  account_switcher: "Cambiar cuenta",
-  open: "Abrir",
-  buy: "Comprar",
-  balance: "Saldo",
-  estimated_fee: "Tarifa estimada",
-  fee_pending: "La vista previa de la tarifa aparece después de informar destino y cantidad.",
-  history_empty: "No hay transacciones cargadas.",
-  from: "De",
-  to_network: "Red de destino",
-  from_network: "Red de origen",
-  estimated_receive: "Recepción estimada",
-  preview_quote: "Cotización previa",
-  session: "Sesión",
-  security: "Seguridad",
-  vault: "Vault",
-  language: "Idioma",
-  global: "Global",
-  local: "Local",
-  native_coin: "moneda nativa",
-  use_my_address: "Usar mi dirección",
-  network: "Red",
-};
-
-const FR: Record<UIKey, string> = {
-  dashboard: "Tableau",
-  send: "Envoyer",
-  receive: "Recevoir",
-  tokens: "Tokens",
-  activity: "Activité",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Paramètres",
-  create: "Créer",
-  import: "Importer",
-  unlock: "Déverrouiller",
-  password: "Mot de passe",
-  confirm: "Confirmer",
-  seed_new: "Nouvelle seed (12 mots)",
-  seed_import: "Phrase seed",
-  secure_enter: "Protéger et Entrer",
-  generate: "Générer",
-  copied: "Copié.",
-  scan_qr: "Scanner QR",
-  keep_session: "Garder la session ouverte",
-  logout: "Verrouiller",
-  total_balance: "Solde total",
-  refresh_tokens: "Actualiser Tokens",
-  refresh_activity: "Actualiser Activité",
-  send_token: "Envoyer Actif",
-  token: "Actif",
-  to: "Vers",
-  amount: "Montant",
-  sending: "Envoi...",
-  need_gas: "INRI requis pour le gas.",
-  your_address: "Votre adresse",
-  explorer: "Explorer",
-  add_token: "Ajouter token",
-  custom_tokens: "Tokens manuels",
-  token_symbol: "Symbole",
-  token_decimals: "Décimales",
-  token_address: "Adresse du token",
-  token_logo: "Logo (optionnel)",
-  token_added: "Token ajouté.",
-  avatar: "Avatar",
-  change_avatar: "Changer avatar",
-  remove_avatar: "Supprimer avatar",
-  coming_soon: "Bientôt (UI prête).",
-  delete_vault_confirm: "Supprimer le vault local ? Vous devez avoir la seed pour restaurer.",
-  wrong_password: "Mot de passe incorrect.",
-  no_vault: "Aucun vault local trouvé.",
-  invalid_seed: "Seed invalide.",
-  pw_min: "Le mot de passe doit contenir au moins 8 caractères.",
-  pw_match: "Les mots de passe ne correspondent pas.",
-  invalid_addr: "Adresse invalide.",
-  invalid_amount: "Montant invalide.",
-  amount_gt0: "Le montant doit être supérieur à 0.",
-  camera_fail: "Impossible d'utiliser la caméra.",
-  qr_ok: "QR capturé.",
-  create_account: "Créer Compte",
-  account_switcher: "Changer de compte",
-  open: "Ouvrir",
-  buy: "Acheter",
-  balance: "Solde",
-  estimated_fee: "Frais estimés",
-  fee_pending: "L'aperçu des frais apparaît après avoir saisi destination et montant.",
-  history_empty: "Aucune transaction chargée.",
-  from: "De",
-  to_network: "Réseau de destination",
-  from_network: "Réseau d'origine",
-  estimated_receive: "Réception estimée",
-  preview_quote: "Cotisation estimée",
-  session: "Session",
-  security: "Sécurité",
-  vault: "Vault",
-  language: "Langue",
-  global: "Global",
-  local: "Local",
-  native_coin: "monnaie native",
-  use_my_address: "Utiliser mon adresse",
-  network: "Réseau",
-};
-
-const DE: Record<UIKey, string> = {
-  dashboard: "Dashboard",
-  send: "Senden",
-  receive: "Empfangen",
-  tokens: "Tokens",
-  activity: "Aktivität",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Einstellungen",
-  create: "Erstellen",
-  import: "Importieren",
-  unlock: "Entsperren",
-  password: "Passwort",
-  confirm: "Bestätigen",
-  seed_new: "Neue Seed (12 Wörter)",
-  seed_import: "Seed-Phrase",
-  secure_enter: "Schützen und Starten",
-  generate: "Generieren",
-  copied: "Kopiert.",
-  scan_qr: "QR scannen",
-  keep_session: "In dieser Sitzung entsperrt lassen",
-  logout: "Sperren",
-  total_balance: "Gesamtsaldo",
-  refresh_tokens: "Tokens aktualisieren",
-  refresh_activity: "Aktivität aktualisieren",
-  send_token: "Asset senden",
-  token: "Asset",
-  to: "An",
-  amount: "Betrag",
-  sending: "Wird gesendet...",
-  need_gas: "INRI für Gas erforderlich.",
-  your_address: "Ihre Adresse",
-  explorer: "Explorer",
-  add_token: "Token hinzufügen",
-  custom_tokens: "Manuelle Tokens",
-  token_symbol: "Symbol",
-  token_decimals: "Dezimalstellen",
-  token_address: "Token-Adresse",
-  token_logo: "Logo (optional)",
-  token_added: "Token hinzugefügt.",
-  avatar: "Avatar",
-  change_avatar: "Avatar ändern",
-  remove_avatar: "Avatar entfernen",
-  coming_soon: "Demnächst (UI bereit).",
-  delete_vault_confirm: "Lokalen Vault löschen? Sie benötigen die Seed zum Wiederherstellen.",
-  wrong_password: "Falsches Passwort.",
-  no_vault: "Kein lokaler Vault gefunden.",
-  invalid_seed: "Ungültige Seed.",
-  pw_min: "Das Passwort muss mindestens 8 Zeichen haben.",
-  pw_match: "Die Passwörter stimmen nicht überein.",
-  invalid_addr: "Ungültige Adresse.",
-  invalid_amount: "Ungültiger Betrag.",
-  amount_gt0: "Der Betrag muss größer als 0 sein.",
-  camera_fail: "Kamera konnte nicht verwendet werden.",
-  qr_ok: "QR erfasst.",
-  create_account: "Konto erstellen",
-  account_switcher: "Konto wechseln",
-  open: "Öffnen",
-  buy: "Kaufen",
-  balance: "Saldo",
-  estimated_fee: "Geschätzte Gebühr",
-  fee_pending: "Gebührenvorschau erscheint nach Eingabe von Ziel und Betrag.",
-  history_empty: "Keine Transaktionen geladen.",
-  from: "Von",
-  to_network: "Zielnetzwerk",
-  from_network: "Ausgangsnetzwerk",
-  estimated_receive: "Geschätzter Empfang",
-  preview_quote: "Vorschau-Quote",
-  session: "Sitzung",
-  security: "Sicherheit",
-  vault: "Vault",
-  language: "Sprache",
-  global: "Global",
-  local: "Lokal",
-  native_coin: "native Münze",
-  use_my_address: "Meine Adresse verwenden",
-  network: "Netzwerk",
-};
-
-const RU: Record<UIKey, string> = {
-  dashboard: "Панель",
-  send: "Отправить",
-  receive: "Получить",
-  tokens: "Токены",
-  activity: "Активность",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Настройки",
-  create: "Создать",
-  import: "Импорт",
-  unlock: "Разблокировать",
-  password: "Пароль",
-  confirm: "Подтвердить",
-  seed_new: "Новая seed (12 слов)",
-  seed_import: "Seed-фраза",
-  secure_enter: "Защитить и войти",
-  generate: "Создать",
-  copied: "Скопировано.",
-  scan_qr: "Сканировать QR",
-  keep_session: "Оставить открытым в этой сессии",
-  logout: "Заблокировать",
-  total_balance: "Общий баланс",
-  refresh_tokens: "Обновить токены",
-  refresh_activity: "Обновить активность",
-  send_token: "Отправить актив",
-  token: "Актив",
-  to: "Кому",
-  amount: "Сумма",
-  sending: "Отправка...",
-  need_gas: "Нужен INRI для газа.",
-  your_address: "Ваш адрес",
-  explorer: "Explorer",
-  add_token: "Добавить токен",
-  custom_tokens: "Пользовательские токены",
-  token_symbol: "Символ",
-  token_decimals: "Десятичные",
-  token_address: "Адрес токена",
-  token_logo: "Логотип (необязательно)",
-  token_added: "Токен добавлен.",
-  avatar: "Аватар",
-  change_avatar: "Изменить аватар",
-  remove_avatar: "Удалить аватар",
-  coming_soon: "Скоро (UI готов).",
-  delete_vault_confirm: "Удалить локальный vault? Для восстановления нужна seed.",
-  wrong_password: "Неверный пароль.",
-  no_vault: "Локальный vault не найден.",
-  invalid_seed: "Неверная seed.",
-  pw_min: "Пароль должен содержать минимум 8 символов.",
-  pw_match: "Пароли не совпадают.",
-  invalid_addr: "Неверный адрес.",
-  invalid_amount: "Неверная сумма.",
-  amount_gt0: "Сумма должна быть больше 0.",
-  camera_fail: "Не удалось использовать камеру.",
-  qr_ok: "QR распознан.",
-  create_account: "Создать аккаунт",
-  account_switcher: "Переключение аккаунта",
-  open: "Открыть",
-  buy: "Купить",
-  balance: "Баланс",
-  estimated_fee: "Примерная комиссия",
-  fee_pending: "Предпросмотр комиссии появится после ввода адреса и суммы.",
-  history_empty: "Транзакции не загружены.",
-  from: "От",
-  to_network: "Сеть назначения",
-  from_network: "Исходная сеть",
-  estimated_receive: "Ожидаемое получение",
-  preview_quote: "Предварительная котировка",
-  session: "Сессия",
-  security: "Безопасность",
-  vault: "Vault",
-  language: "Язык",
-  global: "Глобально",
-  local: "Локально",
-  native_coin: "нативная монета",
-  use_my_address: "Использовать мой адрес",
-  network: "Сеть",
-};
-
-const TR: Record<UIKey, string> = {
-  dashboard: "Panel",
-  send: "Gönder",
-  receive: "Al",
-  tokens: "Tokenlar",
-  activity: "Aktivite",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Ayarlar",
-  create: "Oluştur",
-  import: "İçe aktar",
-  unlock: "Kilidi aç",
-  password: "Şifre",
-  confirm: "Onayla",
-  seed_new: "Yeni seed (12 kelime)",
-  seed_import: "Seed ifadesi",
-  secure_enter: "Koru ve Gir",
-  generate: "Oluştur",
-  copied: "Kopyalandı.",
-  scan_qr: "QR tara",
-  keep_session: "Bu oturumda açık tut",
-  logout: "Kilitle",
-  total_balance: "Toplam bakiye",
-  refresh_tokens: "Tokenları yenile",
-  refresh_activity: "Aktiviteyi yenile",
-  send_token: "Varlık gönder",
-  token: "Varlık",
-  to: "Alıcı",
-  amount: "Miktar",
-  sending: "Gönderiliyor...",
-  need_gas: "Gas için INRI gerekir.",
-  your_address: "Adresiniz",
-  explorer: "Explorer",
-  add_token: "Token ekle",
-  custom_tokens: "Özel tokenlar",
-  token_symbol: "Sembol",
-  token_decimals: "Ondalık",
-  token_address: "Token adresi",
-  token_logo: "Logo (isteğe bağlı)",
-  token_added: "Token eklendi.",
-  avatar: "Avatar",
-  change_avatar: "Avatar değiştir",
-  remove_avatar: "Avatar kaldır",
-  coming_soon: "Yakında (arayüz hazır).",
-  delete_vault_confirm: "Yerel vault silinsin mi? Geri yüklemek için seed gerekir.",
-  wrong_password: "Yanlış şifre.",
-  no_vault: "Yerel vault bulunamadı.",
-  invalid_seed: "Geçersiz seed.",
-  pw_min: "Şifre en az 8 karakter olmalı.",
-  pw_match: "Şifreler eşleşmiyor.",
-  invalid_addr: "Geçersiz adres.",
-  invalid_amount: "Geçersiz miktar.",
-  amount_gt0: "Miktar 0'dan büyük olmalı.",
-  camera_fail: "Kamera kullanılamadı.",
-  qr_ok: "QR alındı.",
-  create_account: "Hesap Oluştur",
-  account_switcher: "Hesap değiştirici",
-  open: "Aç",
-  buy: "Satın al",
-  balance: "Bakiye",
-  estimated_fee: "Tahmini ücret",
-  fee_pending: "Ücret önizlemesi hedef ve miktar girildikten sonra görünür.",
-  history_empty: "Yüklenmiş işlem yok.",
-  from: "Gönderen",
-  to_network: "Hedef ağ",
-  from_network: "Kaynak ağ",
-  estimated_receive: "Tahmini alınacak",
-  preview_quote: "Önizleme fiyatı",
-  session: "Oturum",
-  security: "Güvenlik",
-  vault: "Vault",
-  language: "Dil",
-  global: "Global",
-  local: "Yerel",
-  native_coin: "yerel coin",
-  use_my_address: "Adresimi kullan",
-  network: "Ağ",
-};
-
-const AR: Record<UIKey, string> = {
-  dashboard: "لوحة التحكم",
-  send: "إرسال",
-  receive: "استلام",
-  tokens: "الرموز",
-  activity: "النشاط",
-  swap: "مبادلة",
-  bridge: "جسر",
-  settings: "الإعدادات",
-  create: "إنشاء",
-  import: "استيراد",
-  unlock: "فتح",
-  password: "كلمة المرور",
-  confirm: "تأكيد",
-  seed_new: "عبارة seed جديدة (12 كلمة)",
-  seed_import: "عبارة seed",
-  secure_enter: "حماية ودخول",
-  generate: "إنشاء",
-  copied: "تم النسخ.",
-  scan_qr: "مسح QR",
-  keep_session: "الإبقاء على الجلسة مفتوحة",
-  logout: "قفل",
-  total_balance: "الرصيد الإجمالي",
-  refresh_tokens: "تحديث الرموز",
-  refresh_activity: "تحديث النشاط",
-  send_token: "إرسال أصل",
-  token: "الأصل",
-  to: "إلى",
-  amount: "الكمية",
-  sending: "جارٍ الإرسال...",
-  need_gas: "تحتاج INRI للغاز.",
-  your_address: "عنوانك",
-  explorer: "Explorer",
-  add_token: "إضافة رمز",
-  custom_tokens: "رموز مخصصة",
-  token_symbol: "الرمز",
-  token_decimals: "الكسور",
-  token_address: "عنوان الرمز",
-  token_logo: "الشعار (اختياري)",
-  token_added: "تمت إضافة الرمز.",
-  avatar: "الصورة",
-  change_avatar: "تغيير الصورة",
-  remove_avatar: "إزالة الصورة",
-  coming_soon: "قريبًا (الواجهة جاهزة).",
-  delete_vault_confirm: "حذف الـ vault المحلي؟ تحتاج إلى seed للاستعادة.",
-  wrong_password: "كلمة مرور خاطئة.",
-  no_vault: "لم يتم العثور على vault محلي.",
-  invalid_seed: "Seed غير صالحة.",
-  pw_min: "يجب أن تكون كلمة المرور 8 أحرف على الأقل.",
-  pw_match: "كلمتا المرور غير متطابقتين.",
-  invalid_addr: "عنوان غير صالح.",
-  invalid_amount: "كمية غير صالحة.",
-  amount_gt0: "يجب أن تكون الكمية أكبر من 0.",
-  camera_fail: "تعذر استخدام الكاميرا.",
-  qr_ok: "تم التقاط QR.",
-  create_account: "إنشاء حساب",
-  account_switcher: "تبديل الحساب",
-  open: "فتح",
-  buy: "شراء",
-  balance: "الرصيد",
-  estimated_fee: "الرسوم المقدرة",
-  fee_pending: "تظهر معاينة الرسوم بعد إدخال العنوان والكمية.",
-  history_empty: "لا توجد معاملات محملة.",
-  from: "من",
-  to_network: "إلى الشبكة",
-  from_network: "من الشبكة",
-  estimated_receive: "الاستلام المتوقع",
-  preview_quote: "سعر تقديري",
-  session: "الجلسة",
-  security: "الأمان",
-  vault: "Vault",
-  language: "اللغة",
-  global: "عام",
-  local: "محلي",
-  native_coin: "عملة أصلية",
-  use_my_address: "استخدم عنواني",
-  network: "الشبكة",
-};
-
-const HI: Record<UIKey, string> = {
-  dashboard: "डैशबोर्ड",
-  send: "भेजें",
-  receive: "प्राप्त करें",
-  tokens: "टोकन",
-  activity: "गतिविधि",
-  swap: "स्वैप",
-  bridge: "ब्रिज",
-  settings: "सेटिंग्स",
-  create: "बनाएँ",
-  import: "इम्पोर्ट",
-  unlock: "अनलॉक",
-  password: "पासवर्ड",
-  confirm: "पुष्टि करें",
-  seed_new: "नई seed (12 शब्द)",
-  seed_import: "Seed phrase",
-  secure_enter: "सुरक्षित करें और प्रवेश करें",
-  generate: "जेनरेट",
-  copied: "कॉपी हुआ.",
-  scan_qr: "QR स्कैन करें",
-  keep_session: "इस सत्र में खुला रखें",
-  logout: "लॉक",
-  total_balance: "कुल बैलेंस",
-  refresh_tokens: "टोकन रिफ्रेश करें",
-  refresh_activity: "गतिविधि रिफ्रेश करें",
-  send_token: "एसेट भेजें",
-  token: "एसेट",
-  to: "को",
-  amount: "राशि",
-  sending: "भेजा जा रहा है...",
-  need_gas: "गैस के लिए INRI चाहिए.",
-  your_address: "आपका पता",
-  explorer: "Explorer",
-  add_token: "टोकन जोड़ें",
-  custom_tokens: "कस्टम टोकन",
-  token_symbol: "सिंबल",
-  token_decimals: "डेसिमल",
-  token_address: "टोकन पता",
-  token_logo: "लोगो (वैकल्पिक)",
-  token_added: "टोकन जोड़ा गया.",
-  avatar: "अवतार",
-  change_avatar: "अवतार बदलें",
-  remove_avatar: "अवतार हटाएँ",
-  coming_soon: "जल्द आ रहा है (UI तैयार है).",
-  delete_vault_confirm: "लोकल vault हटाएँ? बहाली के लिए seed चाहिए.",
-  wrong_password: "गलत पासवर्ड.",
-  no_vault: "कोई लोकल vault नहीं मिला.",
-  invalid_seed: "अमान्य seed.",
-  pw_min: "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए.",
-  pw_match: "पासवर्ड मेल नहीं खाते.",
-  invalid_addr: "अमान्य पता.",
-  invalid_amount: "अमान्य राशि.",
-  amount_gt0: "राशि 0 से अधिक होनी चाहिए.",
-  camera_fail: "कैमरा उपयोग नहीं हो सका.",
-  qr_ok: "QR कैप्चर किया गया.",
-  create_account: "खाता बनाएँ",
-  account_switcher: "खाता बदलें",
-  open: "खोलें",
-  buy: "खरीदें",
-  balance: "बैलेंस",
-  estimated_fee: "अनुमानित शुल्क",
-  fee_pending: "शुल्क प्रीव्यू पता और राशि भरने के बाद दिखाई देगा.",
-  history_empty: "कोई ट्रांजैक्शन लोड नहीं हुआ.",
-  from: "से",
-  to_network: "गंतव्य नेटवर्क",
-  from_network: "स्रोत नेटवर्क",
-  estimated_receive: "अनुमानित प्राप्ति",
-  preview_quote: "प्रीव्यू कोट",
-  session: "सेशन",
-  security: "सुरक्षा",
-  vault: "Vault",
-  language: "भाषा",
-  global: "ग्लोबल",
-  local: "लोकल",
-  native_coin: "मूल कॉइन",
-  use_my_address: "मेरा पता उपयोग करें",
-  network: "नेटवर्क",
-};
-
-const ID: Record<UIKey, string> = {
-  dashboard: "Dasbor",
-  send: "Kirim",
-  receive: "Terima",
-  tokens: "Token",
-  activity: "Aktivitas",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Pengaturan",
-  create: "Buat",
-  import: "Impor",
-  unlock: "Buka kunci",
-  password: "Kata sandi",
-  confirm: "Konfirmasi",
-  seed_new: "Seed baru (12 kata)",
-  seed_import: "Frasa seed",
-  secure_enter: "Amankan & Masuk",
-  generate: "Buat",
-  copied: "Disalin.",
-  scan_qr: "Pindai QR",
-  keep_session: "Tetap terbuka di sesi ini",
-  logout: "Kunci",
-  total_balance: "Saldo total",
-  refresh_tokens: "Muat ulang token",
-  refresh_activity: "Muat ulang aktivitas",
-  send_token: "Kirim aset",
-  token: "Aset",
-  to: "Ke",
-  amount: "Jumlah",
-  sending: "Mengirim...",
-  need_gas: "Perlu INRI untuk gas.",
-  your_address: "Alamat Anda",
-  explorer: "Explorer",
-  add_token: "Tambah token",
-  custom_tokens: "Token kustom",
-  token_symbol: "Simbol",
-  token_decimals: "Desimal",
-  token_address: "Alamat token",
-  token_logo: "Logo (opsional)",
-  token_added: "Token ditambahkan.",
-  avatar: "Avatar",
-  change_avatar: "Ubah avatar",
-  remove_avatar: "Hapus avatar",
-  coming_soon: "Segera hadir (UI siap).",
-  delete_vault_confirm: "Hapus vault lokal? Anda perlu seed untuk memulihkan.",
-  wrong_password: "Kata sandi salah.",
-  no_vault: "Vault lokal tidak ditemukan.",
-  invalid_seed: "Seed tidak valid.",
-  pw_min: "Kata sandi minimal 8 karakter.",
-  pw_match: "Kata sandi tidak cocok.",
-  invalid_addr: "Alamat tidak valid.",
-  invalid_amount: "Jumlah tidak valid.",
-  amount_gt0: "Jumlah harus lebih besar dari 0.",
-  camera_fail: "Kamera tidak dapat digunakan.",
-  qr_ok: "QR ditangkap.",
-  create_account: "Buat Akun",
-  account_switcher: "Ganti akun",
-  open: "Buka",
-  buy: "Beli",
-  balance: "Saldo",
-  estimated_fee: "Biaya estimasi",
-  fee_pending: "Pratinjau biaya muncul setelah tujuan dan jumlah diisi.",
-  history_empty: "Tidak ada transaksi dimuat.",
-  from: "Dari",
-  to_network: "Ke jaringan",
-  from_network: "Dari jaringan",
-  estimated_receive: "Estimasi diterima",
-  preview_quote: "Estimasi kurs",
-  session: "Sesi",
-  security: "Keamanan",
-  vault: "Vault",
-  language: "Bahasa",
-  global: "Global",
-  local: "Lokal",
-  native_coin: "koin native",
-  use_my_address: "Gunakan alamat saya",
-  network: "Jaringan",
-};
-
-const VI: Record<UIKey, string> = {
-  dashboard: "Bảng điều khiển",
-  send: "Gửi",
-  receive: "Nhận",
-  tokens: "Token",
-  activity: "Hoạt động",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "Cài đặt",
-  create: "Tạo",
-  import: "Nhập",
-  unlock: "Mở khóa",
-  password: "Mật khẩu",
-  confirm: "Xác nhận",
-  seed_new: "Seed mới (12 từ)",
-  seed_import: "Cụm seed",
-  secure_enter: "Bảo vệ & Vào",
-  generate: "Tạo",
-  copied: "Đã sao chép.",
-  scan_qr: "Quét QR",
-  keep_session: "Giữ mở trong phiên này",
-  logout: "Khóa",
-  total_balance: "Tổng số dư",
-  refresh_tokens: "Làm mới token",
-  refresh_activity: "Làm mới hoạt động",
-  send_token: "Gửi tài sản",
-  token: "Tài sản",
-  to: "Đến",
-  amount: "Số lượng",
-  sending: "Đang gửi...",
-  need_gas: "Cần INRI cho gas.",
-  your_address: "Địa chỉ của bạn",
-  explorer: "Explorer",
-  add_token: "Thêm token",
-  custom_tokens: "Token thủ công",
-  token_symbol: "Ký hiệu",
-  token_decimals: "Số thập phân",
-  token_address: "Địa chỉ token",
-  token_logo: "Logo (tùy chọn)",
-  token_added: "Đã thêm token.",
-  avatar: "Ảnh đại diện",
-  change_avatar: "Đổi ảnh đại diện",
-  remove_avatar: "Xóa ảnh đại diện",
-  coming_soon: "Sắp có (UI sẵn sàng).",
-  delete_vault_confirm: "Xóa vault cục bộ? Bạn cần seed để khôi phục.",
-  wrong_password: "Sai mật khẩu.",
-  no_vault: "Không tìm thấy vault cục bộ.",
-  invalid_seed: "Seed không hợp lệ.",
-  pw_min: "Mật khẩu phải có ít nhất 8 ký tự.",
-  pw_match: "Mật khẩu không khớp.",
-  invalid_addr: "Địa chỉ không hợp lệ.",
-  invalid_amount: "Số lượng không hợp lệ.",
-  amount_gt0: "Số lượng phải lớn hơn 0.",
-  camera_fail: "Không thể sử dụng camera.",
-  qr_ok: "Đã quét QR.",
-  create_account: "Tạo tài khoản",
-  account_switcher: "Chuyển tài khoản",
-  open: "Mở",
-  buy: "Mua",
-  balance: "Số dư",
-  estimated_fee: "Phí ước tính",
-  fee_pending: "Xem trước phí sẽ xuất hiện sau khi nhập địa chỉ và số lượng.",
-  history_empty: "Không có giao dịch nào được tải.",
-  from: "Từ",
-  to_network: "Đến mạng",
-  from_network: "Từ mạng",
-  estimated_receive: "Ước tính nhận",
-  preview_quote: "Báo giá tạm tính",
-  session: "Phiên",
-  security: "Bảo mật",
-  vault: "Vault",
-  language: "Ngôn ngữ",
-  global: "Toàn cầu",
-  local: "Cục bộ",
-  native_coin: "coin gốc",
-  use_my_address: "Dùng địa chỉ của tôi",
-  network: "Mạng",
-};
-
-const TH: Record<UIKey, string> = {
-  dashboard: "แดชบอร์ด",
-  send: "ส่ง",
-  receive: "รับ",
-  tokens: "โทเค็น",
-  activity: "กิจกรรม",
-  swap: "Swap",
-  bridge: "Bridge",
-  settings: "ตั้งค่า",
-  create: "สร้าง",
-  import: "นำเข้า",
-  unlock: "ปลดล็อก",
-  password: "รหัสผ่าน",
-  confirm: "ยืนยัน",
-  seed_new: "Seed ใหม่ (12 คำ)",
-  seed_import: "Seed phrase",
-  secure_enter: "ป้องกันและเข้าใช้งาน",
-  generate: "สร้าง",
-  copied: "คัดลอกแล้ว",
-  scan_qr: "สแกน QR",
-  keep_session: "คงการเปิดใช้งานในเซสชันนี้",
-  logout: "ล็อก",
-  total_balance: "ยอดรวม",
-  refresh_tokens: "รีเฟรชโทเค็น",
-  refresh_activity: "รีเฟรชกิจกรรม",
-  send_token: "ส่งสินทรัพย์",
-  token: "สินทรัพย์",
-  to: "ถึง",
-  amount: "จำนวน",
-  sending: "กำลังส่ง...",
-  need_gas: "ต้องใช้ INRI สำหรับ gas",
-  your_address: "ที่อยู่ของคุณ",
-  explorer: "Explorer",
-  add_token: "เพิ่มโทเค็น",
-  custom_tokens: "โทเค็นกำหนดเอง",
-  token_symbol: "สัญลักษณ์",
-  token_decimals: "ทศนิยม",
-  token_address: "ที่อยู่โทเค็น",
-  token_logo: "โลโก้ (ไม่บังคับ)",
-  token_added: "เพิ่มโทเค็นแล้ว",
-  avatar: "อวตาร",
-  change_avatar: "เปลี่ยนอวตาร",
-  remove_avatar: "ลบอวตาร",
-  coming_soon: "เร็ว ๆ นี้ (UI พร้อมแล้ว)",
-  delete_vault_confirm: "ลบ vault ในเครื่อง? คุณต้องมี seed เพื่อกู้คืน",
-  wrong_password: "รหัสผ่านไม่ถูกต้อง",
-  no_vault: "ไม่พบ vault ในเครื่อง",
-  invalid_seed: "Seed ไม่ถูกต้อง",
-  pw_min: "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร",
-  pw_match: "รหัสผ่านไม่ตรงกัน",
-  invalid_addr: "ที่อยู่ไม่ถูกต้อง",
-  invalid_amount: "จำนวนไม่ถูกต้อง",
-  amount_gt0: "จำนวนต้องมากกว่า 0",
-  camera_fail: "ไม่สามารถใช้กล้องได้",
-  qr_ok: "จับ QR แล้ว",
-  create_account: "สร้างบัญชี",
-  account_switcher: "สลับบัญชี",
-  open: "เปิด",
-  buy: "ซื้อ",
-  balance: "ยอดคงเหลือ",
-  estimated_fee: "ค่าธรรมเนียมโดยประมาณ",
-  fee_pending: "ตัวอย่างค่าธรรมเนียมจะแสดงหลังจากกรอกปลายทางและจำนวน",
-  history_empty: "ไม่มีธุรกรรมที่โหลด",
-  from: "จาก",
-  to_network: "ไปยังเครือข่าย",
-  from_network: "จากเครือข่าย",
-  estimated_receive: "คาดว่าจะได้รับ",
-  preview_quote: "ราคาโดยประมาณ",
-  session: "เซสชัน",
-  security: "ความปลอดภัย",
-  vault: "Vault",
-  language: "ภาษา",
-  global: "ทั่วโลก",
-  local: "ภายในเครื่อง",
-  native_coin: "เหรียญเนทีฟ",
-  use_my_address: "ใช้ที่อยู่ของฉัน",
-  network: "เครือข่าย",
-};
-
-const ZH: Record<UIKey, string> = {
-  dashboard: "仪表板",
-  send: "发送",
-  receive: "接收",
-  tokens: "代币",
-  activity: "活动",
-  swap: "兑换",
-  bridge: "桥接",
-  settings: "设置",
-  create: "创建",
-  import: "导入",
-  unlock: "解锁",
-  password: "密码",
-  confirm: "确认",
-  seed_new: "新 seed（12 个词）",
-  seed_import: "Seed 短语",
-  secure_enter: "保护并进入",
-  generate: "生成",
-  copied: "已复制。",
-  scan_qr: "扫描 QR",
-  keep_session: "在此会话中保持解锁",
-  logout: "锁定",
-  total_balance: "总余额",
-  refresh_tokens: "刷新代币",
-  refresh_activity: "刷新活动",
-  send_token: "发送资产",
-  token: "资产",
-  to: "到",
-  amount: "数量",
-  sending: "发送中...",
-  need_gas: "需要 INRI 支付 gas。",
-  your_address: "您的地址",
-  explorer: "Explorer",
-  add_token: "添加代币",
-  custom_tokens: "自定义代币",
-  token_symbol: "符号",
-  token_decimals: "小数位",
-  token_address: "代币地址",
-  token_logo: "Logo（可选）",
-  token_added: "代币已添加。",
-  avatar: "头像",
-  change_avatar: "更换头像",
-  remove_avatar: "删除头像",
-  coming_soon: "即将推出（界面已准备）。",
-  delete_vault_confirm: "删除本地 vault？恢复时需要 seed。",
-  wrong_password: "密码错误。",
-  no_vault: "未找到本地 vault。",
-  invalid_seed: "无效的 seed。",
-  pw_min: "密码至少需要 8 个字符。",
-  pw_match: "密码不匹配。",
-  invalid_addr: "无效地址。",
-  invalid_amount: "无效数量。",
-  amount_gt0: "数量必须大于 0。",
-  camera_fail: "无法使用相机。",
-  qr_ok: "已捕获 QR。",
-  create_account: "创建账户",
-  account_switcher: "切换账户",
-  open: "打开",
-  buy: "购买",
-  balance: "余额",
-  estimated_fee: "预估手续费",
-  fee_pending: "填写目标地址和数量后显示手续费预览。",
-  history_empty: "没有已加载的交易。",
-  from: "从",
-  to_network: "到网络",
-  from_network: "来源网络",
-  estimated_receive: "预计接收",
-  preview_quote: "预览报价",
-  session: "会话",
-  security: "安全",
-  vault: "Vault",
-  language: "语言",
-  global: "全局",
-  local: "本地",
-  native_coin: "原生代币",
-  use_my_address: "使用我的地址",
-  network: "网络",
-};
-
-const JA: Record<UIKey, string> = {
-  dashboard: "ダッシュボード",
-  send: "送信",
-  receive: "受取",
-  tokens: "トークン",
-  activity: "アクティビティ",
-  swap: "スワップ",
-  bridge: "ブリッジ",
-  settings: "設定",
-  create: "作成",
-  import: "インポート",
-  unlock: "ロック解除",
-  password: "パスワード",
-  confirm: "確認",
-  seed_new: "新しい seed（12語）",
-  seed_import: "Seed フレーズ",
-  secure_enter: "保護して入る",
-  generate: "生成",
-  copied: "コピーしました。",
-  scan_qr: "QR スキャン",
-  keep_session: "このセッションでロック解除を保持",
-  logout: "ロック",
-  total_balance: "合計残高",
-  refresh_tokens: "トークン更新",
-  refresh_activity: "アクティビティ更新",
-  send_token: "資産を送信",
-  token: "資産",
-  to: "宛先",
-  amount: "数量",
-  sending: "送信中...",
-  need_gas: "gas に INRI が必要です。",
-  your_address: "あなたのアドレス",
-  explorer: "Explorer",
-  add_token: "トークン追加",
-  custom_tokens: "カスタムトークン",
-  token_symbol: "シンボル",
-  token_decimals: "小数",
-  token_address: "トークンアドレス",
-  token_logo: "ロゴ（任意）",
-  token_added: "トークンを追加しました。",
-  avatar: "アバター",
-  change_avatar: "アバター変更",
-  remove_avatar: "アバター削除",
-  coming_soon: "近日公開（UI 準備済み）。",
-  delete_vault_confirm: "ローカル vault を削除しますか？復元には seed が必要です。",
-  wrong_password: "パスワードが違います。",
-  no_vault: "ローカル vault が見つかりません。",
-  invalid_seed: "無効な seed です。",
-  pw_min: "パスワードは8文字以上必要です。",
-  pw_match: "パスワードが一致しません。",
-  invalid_addr: "無効なアドレスです。",
-  invalid_amount: "無効な数量です。",
-  amount_gt0: "数量は0より大きい必要があります。",
-  camera_fail: "カメラを使用できませんでした。",
-  qr_ok: "QR を読み取りました。",
-  create_account: "アカウント作成",
-  account_switcher: "アカウント切替",
-  open: "開く",
-  buy: "購入",
-  balance: "残高",
-  estimated_fee: "推定手数料",
-  fee_pending: "送信先と数量を入力すると手数料プレビューが表示されます。",
-  history_empty: "読み込まれた取引はありません。",
-  from: "送信元",
-  to_network: "送信先ネットワーク",
-  from_network: "送信元ネットワーク",
-  estimated_receive: "受取見積もり",
-  preview_quote: "見積もりレート",
-  session: "セッション",
-  security: "セキュリティ",
-  vault: "Vault",
-  language: "言語",
-  global: "グローバル",
-  local: "ローカル",
-  native_coin: "ネイティブコイン",
-  use_my_address: "自分のアドレスを使う",
-  network: "ネットワーク",
-};
-
-const KO: Record<UIKey, string> = {
-  dashboard: "대시보드",
-  send: "보내기",
-  receive: "받기",
-  tokens: "토큰",
-  activity: "활동",
-  swap: "스왑",
-  bridge: "브리지",
-  settings: "설정",
-  create: "생성",
-  import: "가져오기",
-  unlock: "잠금 해제",
-  password: "비밀번호",
-  confirm: "확인",
-  seed_new: "새 seed (12단어)",
-  seed_import: "Seed 문구",
-  secure_enter: "보호 후 प्रवेश",
-  generate: "생성",
-  copied: "복사됨.",
-  scan_qr: "QR 스캔",
-  keep_session: "이 세션에서 잠금 해제 유지",
-  logout: "잠금",
-  total_balance: "총 잔액",
-  refresh_tokens: "토큰 새로고침",
-  refresh_activity: "활동 새로고침",
-  send_token: "자산 보내기",
-  token: "자산",
-  to: "받는 주소",
-  amount: "수량",
-  sending: "전송 중...",
-  need_gas: "가스를 위해 INRI가 필요합니다.",
-  your_address: "내 주소",
-  explorer: "Explorer",
-  add_token: "토큰 추가",
-  custom_tokens: "사용자 지정 토큰",
-  token_symbol: "심볼",
-  token_decimals: "소수점",
-  token_address: "토큰 주소",
-  token_logo: "로고 (선택)",
-  token_added: "토큰이 추가되었습니다.",
-  avatar: "아바타",
-  change_avatar: "아바타 변경",
-  remove_avatar: "아바타 제거",
-  coming_soon: "곧 제공됩니다 (UI 준비 완료).",
-  delete_vault_confirm: "로컬 vault를 삭제하시겠습니까? 복원하려면 seed가 필요합니다.",
-  wrong_password: "잘못된 비밀번호입니다.",
-  no_vault: "로컬 vault를 찾을 수 없습니다.",
-  invalid_seed: "유효하지 않은 seed입니다.",
-  pw_min: "비밀번호는 최소 8자 이상이어야 합니다.",
-  pw_match: "비밀번호가 일치하지 않습니다.",
-  invalid_addr: "유효하지 않은 주소입니다.",
-  invalid_amount: "유효하지 않은 수량입니다.",
-  amount_gt0: "수량은 0보다 커야 합니다.",
-  camera_fail: "카메라를 사용할 수 없습니다.",
-  qr_ok: "QR 캡처 완료.",
-  create_account: "계정 생성",
-  account_switcher: "계정 전환",
-  open: "열기",
-  buy: "구매",
-  balance: "잔액",
-  estimated_fee: "예상 수수료",
-  fee_pending: "목적지와 수량을 입력하면 수수료 미리보기가 표시됩니다.",
-  history_empty: "불러온 거래가 없습니다.",
-  from: "보내는 자산",
-  to_network: "도착 네트워크",
-  from_network: "출발 네트워크",
-  estimated_receive: "예상 수령량",
-  preview_quote: "미리보기 가격",
-  session: "세션",
-  security: "보안",
-  vault: "Vault",
-  language: "언어",
-  global: "글로벌",
-  local: "로컬",
-  native_coin: "네이티브 코인",
-  use_my_address: "내 주소 사용",
-  network: "네트워크",
-};
-
 const TRANSLATIONS: Record<Lang, Record<UIKey, string>> = {
   pt: PT,
   en: EN,
-  es: ES,
-  fr: FR,
-  de: DE,
-  ru: RU,
-  tr: TR,
-  ar: AR,
-  hi: HI,
-  id: ID,
-  vi: VI,
-  th: TH,
-  zh: ZH,
-  ja: JA,
-  ko: KO,
+  es: EN,
+  fr: EN,
+  de: EN,
+  ru: EN,
+  tr: EN,
+  ar: EN,
+  hi: EN,
+  id: EN,
+  vi: EN,
+  th: EN,
+  zh: EN,
+  ja: EN,
+  ko: EN,
 };
 
 function tr(lang: Lang, key: UIKey) {
@@ -1396,19 +374,19 @@ const DEFAULT_TOKENS: Token[] = [
     symbol: "iUSD",
     address: "0x116b2fF23e062A52E2c0ea12dF7e2638b62Fa0FC",
     decimals: 6,
-    logo: "/token-iusd.png",
+    logo: assetUrl("token-iusd.png"),
   },
   {
     symbol: "WINRI",
     address: "0x8731F1709745173470821eAeEd9BC600EEC9A3D1",
     decimals: 18,
-    logo: "/token-winri.png",
+    logo: assetUrl("token-winri.png"),
   },
   {
     symbol: "DNR",
     address: "0xDa9541bB01d9EC1991328516C71B0E539a97d27f",
     decimals: 18,
-    logo: "/token-dnr.png",
+    logo: assetUrl("token-dnr.png"),
   },
 ];
 
@@ -1425,10 +403,10 @@ function shortAddr(a: string) {
 
 function getAssetLogo(symbol: string) {
   const s = symbol.toUpperCase();
-  if (s === "INRI") return "/token-inri.png";
-  if (s === "IUSD") return "/token-iusd.png";
-  if (s === "WINRI") return "/token-winri.png";
-  if (s === "DNR") return "/token-dnr.png";
+  if (s === "INRI") return assetUrl("token-inri.png");
+  if (s === "IUSD") return assetUrl("token-iusd.png");
+  if (s === "WINRI") return assetUrl("token-winri.png");
+  if (s === "DNR") return assetUrl("token-dnr.png");
   return "";
 }
 
@@ -1474,7 +452,6 @@ async function sendERC20(
 function computePreviewReceive(fromSymbol: string, toSymbol: string, amount: string, feeBps = 30) {
   const num = Number(amount || "0");
   if (!Number.isFinite(num) || num <= 0) return "0.000000";
-
   const fromP = PREVIEW_PRICES[fromSymbol] ?? 1;
   const toP = PREVIEW_PRICES[toSymbol] ?? 1;
   const gross = (num * fromP) / toP;
@@ -1520,7 +497,7 @@ export default function App() {
 
   const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
   const [txs, setTxs] = useState<any[]>([]);
-  const [loadingTxs, setLoadingTxs] = useState(false);
+  const [loadingTxs] = useState(false);
 
   const [customTokens, setCustomTokens] = useState<Token[]>(() => {
     try {
@@ -1576,71 +553,6 @@ export default function App() {
   const bridgeReceivePreview = useMemo(
     () => computeBridgeReceive(bridgeAmount, 20),
     [bridgeAmount]
-  );
-
-  const mobileAccountPanel = (
-    <div className="mobileDrawer">
-      <div className="drawerHead">
-        <div>
-          <b>INRI CHAIN</b>
-          <div className="muted2">ChainId {INRI.chainIdDec}</div>
-        </div>
-        {networkOk ? <span className="badgeOk">Online</span> : <span className="badgeBad">Offline</span>}
-      </div>
-
-      <div className="drawerBody">
-        <div className="accountPill">
-          <div className="accountLeft">
-            <div className="avatarPill">
-              {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
-            </div>
-            <div>
-              <div className="pillTitle">{view === "wallet" ? "Wallet" : "Not unlocked"}</div>
-              <div className="mono muted2 pillSub">{view === "wallet" ? shortAddr(selected) : "—"}</div>
-            </div>
-          </div>
-
-          {view === "wallet" && (
-            <button className="btn btnGhost" onClick={() => copy(selected)}>
-              <Copy size={16} />
-            </button>
-          )}
-        </div>
-
-        <div className="cardFlat">
-          <div className="labelRow">
-            <div className="label">{tr(lang, "account_switcher")}</div>
-          </div>
-
-          <select className="select" value={selectedIndex} onChange={(e) => setSelectedIndex(Number(e.target.value))}>
-            {accounts.map((a) => (
-              <option key={a.index} value={a.index}>
-                Account {a.index} — {a.address.slice(0, 8)}…{a.address.slice(-6)}
-              </option>
-            ))}
-          </select>
-
-          <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
-            <button className="btn" onClick={() => setAccountCount(Math.max(1, accountCount - 1))}>
-              - Account
-            </button>
-            <button className="btn" onClick={createAnotherAccount}>
-              + {tr(lang, "create_account")}
-            </button>
-          </div>
-
-          <div className="muted2 smallTop">
-            Path: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
-          </div>
-        </div>
-
-        <div className="cardFlat">
-          <div className="muted">{tr(lang, "balance")}</div>
-          <div className="balBig">{Number(balance).toFixed(6)}</div>
-          <div className="muted2">INRI</div>
-        </div>
-      </div>
-    </div>
   );
 
   function showToast(msg: string) {
@@ -1715,12 +627,10 @@ export default function App() {
     if (view !== "wallet") return;
     refreshTokens();
     refreshHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [view, selected]);
 
   useEffect(() => {
     estimateSendFee();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider, selected, mnemonic, selectedIndex, sendTo, sendAmount, sendAsset]);
 
   async function estimateSendFee() {
@@ -2036,7 +946,7 @@ export default function App() {
       const devices = await BrowserMultiFormatReader.listVideoInputDevices();
       const deviceId = devices?.[0]?.deviceId;
 
-      await reader.decodeFromVideoDevice(deviceId, video, (result) => {
+      await reader.decodeFromVideoDevice(deviceId, video, (result: any) => {
         if (result?.getText) {
           const txt = result.getText();
           const m = txt.match(/0x[a-fA-F0-9]{40}/);
@@ -2067,7 +977,7 @@ export default function App() {
 
   const totalAssets = useMemo(() => {
     return [
-      { symbol: "INRI", amount: balance, logo: "/token-inri.png", subtitle: tr(lang, "native_coin") },
+      { symbol: "INRI", amount: balance, logo: assetUrl("token-inri.png"), subtitle: tr(lang, "native_coin") },
       ...TOKENS.map((t) => ({
         symbol: t.symbol,
         amount: tokenBalances[t.symbol] ?? "0.0",
@@ -2081,6 +991,70 @@ export default function App() {
     if (symbol.toUpperCase() === "INRI") return Number(balance || "0").toFixed(6);
     return tokenBalances[symbol] ?? "0.0";
   }
+
+  const mobileAccountPanel =
+    view === "wallet" && tab === "dashboard" ? (
+      <div className="mobileDrawer">
+        <div className="drawerHead">
+          <div>
+            <b>INRI CHAIN</b>
+            <div className="muted2">ChainId {INRI.chainIdDec}</div>
+          </div>
+          {networkOk ? <span className="badgeOk">Online</span> : <span className="badgeBad">Offline</span>}
+        </div>
+
+        <div className="drawerBody">
+          <div className="accountPill">
+            <div className="accountLeft">
+              <div className="avatarPill">
+                {avatar ? <img src={avatar} alt="avatar" /> : <div className="avatarDot" />}
+              </div>
+              <div>
+                <div className="pillTitle">Wallet</div>
+                <div className="mono muted2 pillSub">{shortAddr(selected)}</div>
+              </div>
+            </div>
+
+            <button className="btn btnGhost" onClick={() => copy(selected)}>
+              <Copy size={16} />
+            </button>
+          </div>
+
+          <div className="cardFlat">
+            <div className="labelRow">
+              <div className="label">{tr(lang, "account_switcher")}</div>
+            </div>
+
+            <select className="select" value={selectedIndex} onChange={(e) => setSelectedIndex(Number(e.target.value))}>
+              {accounts.map((a) => (
+                <option key={a.index} value={a.index}>
+                  Account {a.index} — {a.address.slice(0, 8)}…{a.address.slice(-6)}
+                </option>
+              ))}
+            </select>
+
+            <div style={{ marginTop: 10, display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <button className="btn" onClick={() => setAccountCount(Math.max(1, accountCount - 1))}>
+                - Account
+              </button>
+              <button className="btn" onClick={createAnotherAccount}>
+                + {tr(lang, "create_account")}
+              </button>
+            </div>
+
+            <div className="muted2 smallTop">
+              Path: <span className="mono">m/44&apos;/60&apos;/0&apos;/0/i</span>
+            </div>
+          </div>
+
+          <div className="cardFlat">
+            <div className="muted">{tr(lang, "balance")}</div>
+            <div className="balBig">{Number(balance).toFixed(6)}</div>
+            <div className="muted2">INRI</div>
+          </div>
+        </div>
+      </div>
+    ) : null;
 
   const Nav = ({ icon, label, id }: { icon: React.ReactNode; label: string; id: Tab }) => (
     <button className={`navItem ${tab === id ? "navItemActive" : ""}`} onClick={() => setTab(id)}>
@@ -2123,7 +1097,7 @@ export default function App() {
         .appShell{
           min-height:100vh;
           display:grid;
-          grid-template-columns: 230px 1fr 320px;
+          grid-template-columns:230px 1fr 320px;
         }
         .sidebar{
           border-right:1px solid var(--line);
@@ -2639,12 +1613,6 @@ export default function App() {
           background:#000;
           border:1px solid var(--line);
         }
-        .swapHeaderRow{
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:12px;
-        }
         .assetChooser{
           border:1px solid var(--line);
           border-radius:16px;
@@ -2674,7 +1642,6 @@ export default function App() {
           font-size:12px;
           color:var(--muted);
         }
-
         @media (max-width: 1120px){
           .appShell{
             grid-template-columns:210px 1fr 290px;
@@ -2716,7 +1683,7 @@ export default function App() {
       <div className="appShell">
         <aside className="sidebar">
           <div className="sideTop">
-            <img className="brandLogo" src="/favicon.png" alt="INRI" />
+            <img className="brandLogo" src={assetUrl("favicon.png")} alt="INRI" />
             <div className="brandTxt">
               <b>INRI Wallet</b>
               <span>Official PWA • INRI CHAIN</span>
@@ -3018,7 +1985,7 @@ export default function App() {
                       <div className="tokenRow">
                         <div className="tokenLeft">
                           <div className="tokenLogo">
-                            <img src="/token-inri.png" alt="INRI" />
+                            <img src={assetUrl("token-inri.png")} alt="INRI" />
                           </div>
                           <div>
                             <div className="tokenSym">INRI</div>
@@ -3354,7 +2321,7 @@ export default function App() {
                         <input className="input" value={tokAddr} onChange={(e) => setTokAddr(e.target.value)} placeholder="0x..." />
 
                         <label className="label">{tr(lang, "token_logo")}</label>
-                        <input className="input" value={tokLogo} onChange={(e) => setTokLogo(e.target.value)} placeholder="/token-xxx.png" />
+                        <input className="input" value={tokLogo} onChange={(e) => setTokLogo(e.target.value)} placeholder="https://..." />
 
                         <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
                           <button className="btn btnPrimary" onClick={addCustomToken}>
